@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryManager"
+        xmlns:vw="clr-namespace:InventoryManager.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Inventory Manager" Height="450" Width="800">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <LinearGradientBrush.RelativeTransform>
+                <TransformGroup>
+                    <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                    <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                    <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </LinearGradientBrush.RelativeTransform>
+            <GradientStop Color="#FF1C98FF" Offset="1"/>
+            <GradientStop Color="#FF6EBDFF"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.DataContext>
+        <vw:MainView/>
+    </Window.DataContext>
     <Grid>
-        
+        <Label Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Content="Inventory Management System" FontSize="20" FontWeight="Bold" Margin="0" Padding="20,10,0,20"/>
+        <vw:MainView Padding="0,20,0,0" Margin="0"/>
     </Grid>
 </Window>

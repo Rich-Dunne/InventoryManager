@@ -1,0 +1,131 @@
+﻿<UserControl x:Class="InventoryManager.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InventoryManager.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Foreground="Black">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Path=Products.Count, StringFormat=Products ({0})}"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Grid.Row="1" 
+            FontSize="16"/>
+
+        <Button x:Name="btnAddProduct"
+                Grid.Column="2"
+                Grid.Row="1"
+                Content="Add Product"
+                Width="75"
+                HorizontalAlignment="Right"
+                Click="btnAddProduct_OnClick"/>
+
+        <DataGrid x:Name="dataGridProducts"
+                  AutoGenerateColumns="false"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="2"
+                  Grid.Row="2"
+                  Grid.RowSpan="5"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  ItemsSource="{Binding Path=Products}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Product ID"
+                    Width="auto"
+                    Binding="{Binding Path=ProductID}"/>
+
+                <DataGridTextColumn
+                Header="Product Name"
+                Width="auto"
+                Binding="{Binding Path=Name}"/>
+
+                <DataGridTextColumn
+                Header="Price"
+                Width="auto"
+                Binding="{Binding Path=Price}"/>
+
+                <DataGridTextColumn
+                Header="Inventory"
+                Width="auto"
+                Binding="{Binding Path=Inventory}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Text="{Binding Path=Parts.Count, StringFormat=Parts ({0})}"
+            Grid.Column="3"
+            Grid.ColumnSpan="2"
+            Grid.Row="1" 
+            FontSize="16" Margin="50,0,0,0"/>
+
+        <Button x:Name="btnAddPart"
+                Grid.Column="3"
+                Grid.Row="1"
+                Content="Add Part"
+                Width="75"
+                HorizontalAlignment="Right"/>
+
+        <DataGrid x:Name="dataGridParts"
+                  AutoGenerateColumns="false"
+                  Grid.Column="3"
+                  Grid.Row="2"
+                  Grid.RowSpan="5"
+                  MaxHeight="200"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding Path=Parts}" Padding="0" Margin="50,0,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Part ID"
+                    Width="auto"
+                    Binding="{Binding Path=PartID}"/>
+
+                <DataGridTextColumn
+                Header="Part Name"
+                Width="auto"
+                Binding="{Binding Path=Name}"/>
+
+                <DataGridTextColumn
+                Header="Price"
+                Width="auto"
+                Binding="{Binding Path=Price}"/>
+
+                <DataGridTextColumn
+                Header="Inventory"
+                Width="auto"
+                Binding="{Binding Path=Inventory}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button x:Name="btnClose"
+                Grid.Column="3"
+                Grid.Row="7"
+                Width="50"
+                HorizontalAlignment="Right"
+                Content="Close" Margin="0,10,0,0"/>
+    </Grid>
+</UserControl>
