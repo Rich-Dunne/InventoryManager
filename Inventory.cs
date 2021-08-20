@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using InventoryManager.Models;
 
 namespace InventoryManager
@@ -41,7 +44,20 @@ namespace InventoryManager
         /// <param name="product"></param>
         internal static void AddProduct(Product product)
         {
-            Products.Add(product);
+            if(Products.Count == 0 || (Products.Count > 0 && Products.Last().ProductID == product.ProductID - 1))
+            {
+                Products.Add(product);
+                return;
+            }
+
+            if (product.ProductID == 0 && Products.First().ProductID != 0)
+            {
+                Products.Insert(0, product);
+                return;
+            }
+
+            var previousProduct = Products.FirstOrDefault(x => x.ProductID == product.ProductID - 1);
+            Products.Insert(Products.IndexOf(previousProduct), product);
         }
 
         /// <summary>
@@ -51,6 +67,7 @@ namespace InventoryManager
         internal static bool RemoveProduct(int productID)
         {
             DeletedProductIDs.Enqueue(productID);
+            Products.Remove(Products.FirstOrDefault(x => x.ProductID == productID));
             return false;
         }
 
@@ -79,7 +96,19 @@ namespace InventoryManager
         /// <param name="part"></param>
         internal static void AddPart(Part part)
         {
-            Parts.Add(part);
+            if(Parts.Count == 0 || (Parts.Count > 0 && Parts.Last().PartID == part.PartID - 1))
+            {
+                Parts.Add(part);
+                return;
+            }
+            if (part.PartID == 0 && Parts.First().PartID != 0)
+            {
+                Parts.Insert(0, part);
+                return;
+            }
+
+            var previousPart = Parts.FirstOrDefault(x => x.PartID == part.PartID - 1);
+            Parts.Insert(Parts.IndexOf(previousPart), part);
         }
 
         /// <summary>

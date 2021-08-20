@@ -1,28 +1,22 @@
-﻿using System.ComponentModel;
-using InventoryManager.Models;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
-using System;
+﻿using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public BindingList<Product> Products { get => Inventory.Products; set => OnPropertyChanged("Products"); }
-        public BindingList<Part> Parts { get => Inventory.Parts; set => OnPropertyChanged("Parts"); }
+        private readonly NavigationStore _navigationStore;
 
-        public MainWindowViewModel()
+        public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
+
+        public MainWindowViewModel(NavigationStore navigationStore)
         {
-            Inventory.InitializeData();
+            _navigationStore = navigationStore;
+            _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
-        private void OnPropertyChanged(string propertyName)
+        private void OnCurrentViewModelChanged()
         {
-            if(PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }

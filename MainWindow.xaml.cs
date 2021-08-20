@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+﻿using InventoryManager.Stores;
 using InventoryManager.ViewModels;
+using System.Windows;
 
 namespace InventoryManager
 {
@@ -15,12 +9,12 @@ namespace InventoryManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowViewModel ViewModel;
         public MainWindow()
         {
             InitializeComponent();
-            ViewModel = new MainWindowViewModel();
-            DataContext = ViewModel;
+            NavigationStore navigationStore = new NavigationStore();
+            navigationStore.CurrentViewModel = new HomeViewModel(navigationStore);
+            DataContext = new MainWindowViewModel(navigationStore);
         }
     }
 }
