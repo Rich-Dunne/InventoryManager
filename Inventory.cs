@@ -29,13 +29,13 @@ namespace InventoryManager
             AddPart(new OutsourcedPart("Part 3", 4.75, 5, 2, 6, "Company X"));
             AddPart(new OutsourcedPart("Part 4", 14.99, 12, 2, 6, "Company Y"));
             AddPart(new InHousePart("Part 5", 27.99, 32, 2, 6, 34675));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company Z"));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company ABC"));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company DEF"));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company Z"));
+            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company ABC"));
+            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company DEF"));
+            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace InventoryManager
         {
             DeletedProductIDs.Enqueue(productID);
             Products.Remove(Products.FirstOrDefault(x => x.ProductID == productID));
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -118,7 +118,8 @@ namespace InventoryManager
         internal static bool DeletePart(Part part)
         {
             DeletedPartIDs.Enqueue(part.PartID);
-            return false;
+            Parts.Remove(Parts.FirstOrDefault(x => x.PartID == part.PartID));
+            return true;
         }
 
         /// <summary>
