@@ -24,6 +24,18 @@
         </LinearGradientBrush>
     </Window.Background>
 
+    <!--<Window.Resources>
+        <ControlTemplate x:Key="validationErrorTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" 
+            DockPanel.Dock="Top">!</TextBlock>
+                <AdornedElementPlaceholder 
+           x:Name="ErrorAdorner"
+        ></AdornedElementPlaceholder>
+            </DockPanel>
+        </ControlTemplate>
+    </Window.Resources>-->
+    
     <Grid>
         <ContentControl Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
