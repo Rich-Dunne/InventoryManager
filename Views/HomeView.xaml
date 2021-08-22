@@ -8,15 +8,32 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -28,72 +45,116 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <!-- Row 2 -->
+        <Label Grid.Column="1" Grid.ColumnSpan="3" 
+               Grid.Row="2" 
+               FontSize="20" FontWeight="Bold" 
+               Content="Inventory Manager"/>
+
+        <!-- Row 3 -->
         <TextBlock Text="{Binding Products.Count, StringFormat=Products (\{0\})}"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            Grid.Row="1" 
+            Grid.Row="3" 
             FontSize="16"/>
+        
+        <!-- Row 4 -->
+        <TextBox x:Name="searchBox"
+            Grid.Column="1" Grid.ColumnSpan="3" 
+            Grid.Row="4"
+            Width="200" Height="20"
+            HorizontalAlignment="Left"
+            Text="{Binding SearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <Button Grid.Column="4" Grid.Row="4"
+                Width="75" Height="20"
+                HorizontalAlignment="Right"
+                Content="Search"
+                Command="{Binding SearchPartCommand}"/>
+
+
+        <!-- Row 2 -->
+        <!--<TextBlock Text="{Binding Products.Count, StringFormat=Products (\{0\})}"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Grid.Row="2" 
+            FontSize="16"/>-->
+
+        <Button x:Name="btnDeleteProduct"
+                Grid.Column="3"
+                Grid.Row="10"
+                Content="Delete Product"
+                Width="auto"
+                HorizontalAlignment="Right"
+                Command="{Binding DeleteProductCommand}"/>
+        
         <Button x:Name="btnAddProduct"
-                Grid.Column="2"
-                Grid.Row="1"
+                Grid.Column="4"
+                Grid.Row="10"
                 Content="Add Product"
                 Width="75"
                 HorizontalAlignment="Right"
                 Command="{Binding NavigateAddProductCommand}"/>
 
-
-        <DataGrid x:Name="dataGridProducts"
-                  AutoGenerateColumns="false"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="2"
-                  Grid.Row="2"
-                  Grid.RowSpan="5"
-                  CanUserResizeRows="False"
-                  HeadersVisibility="Column"
-                  ItemsSource="{Binding Products}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Header="Product ID"
-                    Width="auto"
-                    Binding="{Binding ProductID}"/>
-
-                <DataGridTextColumn
-                Header="Product Name"
-                Width="auto"
-                Binding="{Binding Name}"/>
-
-                <DataGridTextColumn
-                Header="Price"
-                Width="auto"
-                Binding="{Binding Price}"/>
-
-                <DataGridTextColumn
-                Header="Inventory"
-                Width="auto"
-                Binding="{Binding Inventory}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <TextBlock Text="{Binding Parts.Count, StringFormat=Parts (\{0\})}"
+        <!--<TextBlock Text="{Binding Parts.Count, StringFormat=Parts (\{0\})}"
             Grid.Column="3"
             Grid.ColumnSpan="2"
-            Grid.Row="1" 
+            Grid.Row="2" 
             FontSize="16" Margin="50,0,0,0"/>
 
         <Button x:Name="btnAddPart"
                 Grid.Column="3"
-                Grid.Row="1"
+                Grid.Row="2"
                 Content="Add Part"
                 Width="75"
                 HorizontalAlignment="Right"
-                Command="{Binding NavigateAddPartCommand}"/>
+                Command="{Binding NavigateAddPartCommand}"/>-->
 
-        <DataGrid x:Name="dataGridParts"
+        <!-- Row 3 -->
+        
+        <DataGrid x:Name="dataGridProducts"
+                  AutoGenerateColumns="False"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="4"
+                  ColumnWidth="auto"
+                  Grid.Row="5"
+                  Grid.RowSpan="5"
+                  IsReadOnly="True"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  ItemsSource="{Binding Products}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Product ID"
+                    Width="50"
+                    Binding="{Binding ProductID}"/>
+
+                <DataGridTextColumn
+                    Header="Product Name"
+                    Width="100"
+                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn
+                    Header="Price"
+                    Width="75"
+                    Binding="{Binding Price}"/>
+
+                <DataGridTextColumn
+                    Header="Inventory"
+                    Width="60"
+                    Binding="{Binding Inventory}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--<DataGrid x:Name="dataGridParts"
                   AutoGenerateColumns="false"
                   Grid.Column="3"
-                  Grid.Row="2"
+                  Grid.Row="3"
                   Grid.RowSpan="5"
+                  IsReadOnly="True"
                   MaxHeight="200"
                   CanUserResizeRows="False"
                   HeadersVisibility="Column"
@@ -121,16 +182,16 @@
                 Width="auto"
                 Binding="{Binding Inventory}"/>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
 
-        <Button x:Name="btnClose"
+        <!-- Row 8 -->
+        <!--<Button x:Name="btnClose"
                 Grid.Column="3"
-                Grid.Row="7"
+                Grid.Row="8"
                 Width="50"
                 HorizontalAlignment="Right"
                 Content="Exit" Margin="0,10,0,0"
-                Click="btnClose_Click"
                 Command="{Binding CloseWindowCommand}"
-                CommandParameter="{Binding ElementName=PrimaryWindow}"/>
+                CommandParameter="{Binding ElementName=PrimaryWindow}"/>-->
     </Grid>
 </UserControl>

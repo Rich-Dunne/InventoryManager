@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace InventoryManager.Views
 {
@@ -16,12 +10,6 @@ namespace InventoryManager.Views
         public HomeView()
         {
             InitializeComponent();
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            //Window parentWindow = Window.GetWindow(this);
-            //parentWindow.Close();
         }
     }
 }
