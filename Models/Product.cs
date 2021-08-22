@@ -26,6 +26,17 @@ namespace InventoryManager.Models
             AssociatedParts = associatedParts;
         }
 
+        internal Product(int productID, string name, double price, int inventory, int min, int max, BindingList<Part> associatedParts)
+        {
+            _productID = productID;
+            Name = name;
+            Price = price;
+            Inventory = inventory;
+            Min = min;
+            Max = max;
+            AssociatedParts = associatedParts;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
