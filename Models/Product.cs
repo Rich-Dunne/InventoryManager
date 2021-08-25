@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -7,15 +8,82 @@ namespace InventoryManager.Models
     public class Product : INotifyPropertyChanged
     {
         private int _productID;
-        public int ProductID { get => _productID; set => OnPropertyChanged("ProductID"); }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int Inventory { get; set; }
-        internal int Min { get; set; }
-        internal int Max { get; set; }
-        internal BindingList<Part> AssociatedParts { get; }
+        public int ProductID 
+        { 
+            get => _productID;
+            set
+            {
+                _productID = value;
+                OnPropertyChanged(nameof(ProductID));
+            }
+        }
+        private string _name;
+        public string Name 
+        { 
+            get => _name; 
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
 
-        internal Product(string name, double price, int inventory, int min, int max, BindingList<Part> associatedParts)
+        private double _price;
+        public double Price 
+        { 
+            get => _price; 
+            set
+            {
+                _price = value;
+                OnPropertyChanged(nameof(Price));
+            }
+        }
+
+        private int _inventory;
+        public int Inventory
+        {
+            get => _inventory;
+            set
+            {
+                _inventory = value;
+                OnPropertyChanged(nameof(Inventory));
+            }
+        }
+
+        private int _min;
+        public int Min 
+        { 
+            get => _min; 
+            set
+            {
+                _min = value;
+                OnPropertyChanged(nameof(Min));
+            }
+        }
+
+        private int _max;
+        public int Max 
+        {
+            get => _max;
+            set
+            {
+                _max = value;
+                OnPropertyChanged(nameof(Max));
+            }
+        }
+
+        private ObservableCollection<Part> _associatedParts;
+        public ObservableCollection<Part> AssociatedParts 
+        { 
+            get => _associatedParts;
+            set
+            {
+                _associatedParts = value;
+                OnPropertyChanged(nameof(AssociatedParts));
+            }
+        }
+
+        internal Product(string name, double price, int inventory, int min, int max, ObservableCollection<Part> associatedParts)
         {
             _productID = AssignUniqueID();
             Name = name;
@@ -26,7 +94,7 @@ namespace InventoryManager.Models
             AssociatedParts = associatedParts;
         }
 
-        internal Product(int productID, string name, double price, int inventory, int min, int max, BindingList<Part> associatedParts)
+        internal Product(int productID, string name, double price, int inventory, int min, int max, ObservableCollection<Part> associatedParts)
         {
             _productID = productID;
             Name = name;
