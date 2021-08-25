@@ -46,121 +46,114 @@
         </Grid.RowDefinitions>
 
         <!-- Row 2 -->
-        <Label Grid.Column="1" Grid.ColumnSpan="3" 
+        <Label Grid.Column="1"
                Grid.Row="2" 
+               Margin="-5 0 0 0"
                FontSize="20" FontWeight="Bold" 
                Content="Inventory Manager"/>
 
         <!-- Row 3 -->
         <TextBlock Text="{Binding Products.Count, StringFormat=Products (\{0\})}"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Grid.Row="3" 
-            FontSize="16"/>
-        
-        <!-- Row 4 -->
-        <TextBox x:Name="searchBox"
-            Grid.Column="1" Grid.ColumnSpan="3" 
-            Grid.Row="4"
-            Width="200" Height="20"
-            HorizontalAlignment="Left"
-            Text="{Binding SearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                Grid.Column="1"
+                Grid.Row="3" 
+                FontSize="16"/>
 
-        <Button Grid.Column="4" Grid.Row="4"
+        <TextBlock Text="{Binding Parts.Count, StringFormat=Parts (\{0\})}"
+                Grid.Column="5"
+                Grid.ColumnSpan="3"
+                Grid.Row="3" 
+                Margin="50 0 0 0"
+                FontSize="16"/>
+
+        <!-- Row 4 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="4"
+                    Margin="0 5 0 5">
+            
+            <TextBox x:Name="productSearchBox"
+                Width="200" Height="20"
+                Text="{Binding ProductSearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button
                 Width="75" Height="20"
-                HorizontalAlignment="Right"
+                Margin="10 0 0 0"
+                Content="Search"
+                Command="{Binding SearchProductCommand}"/>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="5" Grid.Row="4"
+                    Margin="50 5 0 5">
+            <TextBox x:Name="partSearchBox"
+                Width="200" Height="20"
+                Text="{Binding PartSearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button
+                Width="75" Height="20"
+                Margin="10 0 0 0"
                 Content="Search"
                 Command="{Binding SearchPartCommand}"/>
+        </StackPanel>
 
-
-        <!-- Row 2 -->
-        <!--<TextBlock Text="{Binding Products.Count, StringFormat=Products (\{0\})}"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Grid.Row="2" 
-            FontSize="16"/>-->
-
-        <Button x:Name="btnDeleteProduct"
-                Grid.Column="3"
-                Grid.Row="10"
-                Content="Delete Product"
-                Width="auto"
-                HorizontalAlignment="Right"
-                Command="{Binding DeleteProductCommand}"/>
-        
-        <Button x:Name="btnAddProduct"
-                Grid.Column="4"
-                Grid.Row="10"
-                Content="Add Product"
-                Width="75"
-                HorizontalAlignment="Right"
-                Command="{Binding NavigateAddProductCommand}"/>
-
-        <!--<TextBlock Text="{Binding Parts.Count, StringFormat=Parts (\{0\})}"
-            Grid.Column="3"
-            Grid.ColumnSpan="2"
-            Grid.Row="2" 
-            FontSize="16" Margin="50,0,0,0"/>
-
-        <Button x:Name="btnAddPart"
-                Grid.Column="3"
-                Grid.Row="2"
-                Content="Add Part"
-                Width="75"
-                HorizontalAlignment="Right"
-                Command="{Binding NavigateAddPartCommand}"/>-->
-
-        <!-- Row 3 -->
-        
+        <!-- Row 5 Place this in stack panel?-->
         <DataGrid x:Name="dataGridProducts"
-                  AutoGenerateColumns="False"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="4"
-                  ColumnWidth="auto"
-                  Grid.Row="5"
-                  Grid.RowSpan="5"
-                  IsReadOnly="True"
-                  CanUserResizeRows="False"
-                  HeadersVisibility="Column"
-                  ItemsSource="{Binding Products}"
-                  SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    HorizontalAlignment="Left"
+                    Width="auto"
+                    AutoGenerateColumns="False"
+                    Grid.Column="1"
+                    Grid.Row="5"
+                    Grid.RowSpan="5"
+                    MinColumnWidth="65"
+                    ColumnWidth="*"
+                    IsReadOnly="True"
+                    CanUserResizeRows="False"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding Products}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Product ID"
-                    Width="50"
+                    Width="auto"
                     Binding="{Binding ProductID}"/>
 
                 <DataGridTextColumn
                     Header="Product Name"
-                    Width="100"
+                    Width="auto"
                     Binding="{Binding Name}"/>
 
                 <DataGridTextColumn
                     Header="Price"
-                    Width="75"
+                    Width="auto"
                     Binding="{Binding Price}"/>
 
                 <DataGridTextColumn
                     Header="Inventory"
-                    Width="60"
+                    Width="auto"
                     Binding="{Binding Inventory}"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!--<DataGrid x:Name="dataGridParts"
-                  AutoGenerateColumns="false"
-                  Grid.Column="3"
-                  Grid.Row="3"
-                  Grid.RowSpan="5"
-                  IsReadOnly="True"
-                  MaxHeight="200"
-                  CanUserResizeRows="False"
-                  HeadersVisibility="Column"
-                  ScrollViewer.CanContentScroll="True"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ItemsSource="{Binding Parts}" Padding="0" Margin="50,0,0,0">
+        <DataGrid x:Name="dataGridParts"
+                AutoGenerateColumns="False"
+                Grid.Column="5" Grid.ColumnSpan="3"
+                Grid.Row="5" Grid.RowSpan="5"
+                ColumnWidth="*"
+                MinColumnWidth="71"
+                HorizontalAlignment="Left"       
+                Padding="0" Margin="50,0,0,0"
+                IsReadOnly="True"
+                MaxHeight="200"
+                CanUserResizeRows="False"
+                HeadersVisibility="Column"
+                ScrollViewer.CanContentScroll="True"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ItemsSource="{Binding Parts}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Part ID"
@@ -168,30 +161,88 @@
                     Binding="{Binding PartID}"/>
 
                 <DataGridTextColumn
-                Header="Part Name"
-                Width="auto"
-                Binding="{Binding Name}"/>
+                    Header="Part Name"
+                    Width="auto"
+                    Binding="{Binding Name}"/>
 
                 <DataGridTextColumn
-                Header="Price"
-                Width="auto"
-                Binding="{Binding Price}"/>
+                    Header="Price"
+                    Width="auto"
+                    Binding="{Binding Price}"/>
 
                 <DataGridTextColumn
-                Header="Inventory"
-                Width="auto"
-                Binding="{Binding Inventory}"/>
+                    Header="Inventory"
+                    Width="*"
+                    Binding="{Binding Inventory}"/>
             </DataGrid.Columns>
-        </DataGrid>-->
+        </DataGrid>
 
-        <!-- Row 8 -->
-        <!--<Button x:Name="btnClose"
-                Grid.Column="3"
-                Grid.Row="8"
+        <!-- Row 10 -->
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="1"
+                    Grid.Row="10"
+                    HorizontalAlignment="Right"
+                    Margin="0 5">
+            <Button x:Name="btnDeleteProduct"
+                    Content="Delete Product"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Center"
+                    Command="{Binding DeleteProductCommand}"/>
+
+            <Button x:Name="btnModifyProduct"
+                    Content="Modify Product"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Center"
+                    Command="{Binding NavigateModifyProductCommand}"/>
+
+            <Button x:Name="btnAddProduct"
+                    Content="Add Product"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding NavigateAddProductCommand}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="5" Grid.ColumnSpan="3"
+                    Grid.Row="10"
+                    HorizontalAlignment="Right"
+                    Margin="0 5">
+
+            <Button x:Name="btnDeletePart"
+                    Content="Delete Part"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding DeletePartCommand}"/>
+
+            <Button x:Name="btnModifyPart"
+                    Content="Modify Part"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding NavigateModifyPartCommand}"/>
+
+            <Button x:Name="btnAddPart"
+                    Content="Add Part"
+                    Padding="5"
+                    Margin="5 0 0 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding NavigateAddPartCommand}"/>
+        </StackPanel>
+
+        <!-- Row 11 -->
+        <Button x:Name="btnClose"
+                Grid.Column="5"
+                Grid.Row="11"
                 Width="50"
+                Padding="5"
+                Margin="0 25 0 0"
                 HorizontalAlignment="Right"
-                Content="Exit" Margin="0,10,0,0"
+                Content="Exit"
                 Command="{Binding CloseWindowCommand}"
-                CommandParameter="{Binding ElementName=PrimaryWindow}"/>-->
+                CommandParameter="{Binding ElementName=PrimaryWindow}"/>
     </Grid>
 </UserControl>
