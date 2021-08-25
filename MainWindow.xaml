@@ -7,7 +7,7 @@
         xmlns:Views="clr-namespace:InventoryManager.Views"
         xmlns:ViewModels="clr-namespace:InventoryManager.ViewModels" x:Class="InventoryManager.MainWindow"
         mc:Ignorable="d"
-        Title="Inventory Manager" Height="450" Width="800"
+        Title="Inventory Manager" Height="400" Width="700"
         x:Name="PrimaryWindow">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -45,9 +45,15 @@
                 <DataTemplate DataType="{x:Type ViewModels:AddProductViewModel}">
                     <Views:AddProductView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModels:ModifyProductViewModel}">
+                    <Views:ModifyProductView/>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type ViewModels:AddPartViewModel}">
                     <Views:AddPartView/>
                 </DataTemplate>
+                <!--<DataTemplate DataType="{x:Type ViewModels:ModifyPartViewModel}">
+                    <Views:ModifyPartView/>
+                </DataTemplate>-->
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
