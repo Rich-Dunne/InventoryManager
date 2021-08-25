@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace InventoryManager.ViewModels
 
         #region DataGridSources
         public BindingList<Part> Parts { get; set; } = Inventory.Parts;
-        public BindingList<Part> AssociatedParts { get; } = new BindingList<Part>();
+        public ObservableCollection<Part> AssociatedParts { get; } = new ObservableCollection<Part>();
         #endregion
 
         #region FormProperties
