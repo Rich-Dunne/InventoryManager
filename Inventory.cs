@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace InventoryManager
 {
     internal static class Inventory
     {
-        internal static BindingList<Product> Products { get; } = new BindingList<Product>();
+        internal static ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
         internal static BindingList<Part> Parts { get; } = new BindingList<Part>();
         internal static Queue<int> DeletedProductIDs { get; private set; } = new Queue<int>();
         internal static Queue<int> DeletedPartIDs { get; private set; } = new Queue<int>();
@@ -19,10 +20,10 @@ namespace InventoryManager
         /// </summary>
         internal static void InitializeData()
         {
-            AddProduct(new Product("Product 1", 9.99, 5, 1, 10, null));
-            AddProduct(new Product("Product 2", 19.99, 15, 1, 10, null));
-            AddProduct(new Product("Product 3", 7.99, 7, 1, 10, null));
-            AddProduct(new Product("Product 4", 23.99, 23, 1, 10, null));
+            AddProduct(new Product("Product 1", 9.99, 5, 1, 10, new ObservableCollection<Part>() { new InHousePart("Part 1", 2.99, 3, 2, 6, 12345)  }));
+            AddProduct(new Product("Product 2", 19.99, 15, 1, 10, new ObservableCollection<Part>()));
+            AddProduct(new Product("Product 3", 7.99, 7, 1, 10, new ObservableCollection<Part>()));
+            AddProduct(new Product("Product 4", 23.99, 23, 1, 10, new ObservableCollection<Part>()));
 
             AddPart(new InHousePart("Part 1", 2.99, 3, 2, 6, 12345));
             AddPart(new InHousePart("Part 2", 6.99, 7, 2, 6, 94685));
@@ -87,7 +88,20 @@ namespace InventoryManager
         /// <param name="product"></param>
         internal static void UpdateProduct(int productID, Product product)
         {
-
+            var productToUpdate = Products.FirstOrDefault(x => x.ProductID == productID);
+            productToUpdate.ProductID = product.ProductID;
+            productToUpdate.Name = product.Name;
+            productToUpdate.Inventory = product.Inventory;
+            productToUpdate.Price = product.Price;
+            productToUpdate.Min = product.Min;
+            productToUpdate.Max = product.Max;
+            productToUpdate.AssociatedParts = product.AssociatedParts;
+            if (productToUpdate != null)
+            {
+                productToUpdate = product;
+                Debug.WriteLine($"\"{productToUpdate.Name}\" updated.");
+                Debug.WriteLine($"\"{productToUpdate.Name}\" inventory: {productToUpdate.Inventory}.");
+            }
         }
 
         /// <summary>
