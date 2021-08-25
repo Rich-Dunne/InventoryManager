@@ -6,31 +6,89 @@ namespace InventoryManager.Commands
 {
     public class SearchPartCommand : CommandBase
     {
-        private AddProductViewModel _viewModel;
+        private HomeViewModel _homeViewModel;
+        private AddProductViewModel _addProductViewModel;
+        private ModifyProductViewModel _modifyProductViewModel;
+
+        public SearchPartCommand(HomeViewModel viewModel)
+        {
+            _homeViewModel = viewModel;
+        }
 
         public SearchPartCommand(AddProductViewModel viewModel)
         {
-            _viewModel = viewModel;
+            _addProductViewModel = viewModel;
+        }
+
+        public SearchPartCommand(ModifyProductViewModel viewModel)
+        {
+            _modifyProductViewModel = viewModel;
         }
 
         public override void Execute(object parameter)
         {
-            Debug.WriteLine($"Query is: {_viewModel.SearchBoxContents}");
-            if(string.IsNullOrWhiteSpace(_viewModel.SearchBoxContents))
+            if (_homeViewModel != null)
             {
-                Debug.WriteLine($"Query was empty.");
-                _viewModel.SelectedItem = null;
-                return;
-            }
-            var match = _viewModel.Parts.FirstOrDefault(x => x.Name.Contains(_viewModel.SearchBoxContents));
-            if(match == null)
-            {
-                Debug.WriteLine($"No matches found.");
+                Debug.WriteLine($"Query is: {_homeViewModel.PartSearchBoxContents}");
+                if (string.IsNullOrWhiteSpace(_homeViewModel.PartSearchBoxContents))
+                {
+                    Debug.WriteLine($"Query was empty.");
+                    _homeViewModel.SelectedItem = null;
+                    return;
+                }
+                var match = _homeViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_homeViewModel.PartSearchBoxContents));
+                if (match == null)
+                {
+                    Debug.WriteLine($"No matches found.");
+                    return;
+                }
+
+                Debug.WriteLine($"Match found for \"{_homeViewModel.PartSearchBoxContents}\": {match.Name}");
+                _homeViewModel.SelectedItem = match;
                 return;
             }
 
-            Debug.WriteLine($"Match found for \"{_viewModel.SearchBoxContents}\": {match.Name}");
-            _viewModel.SelectedItem = match;
+            if (_addProductViewModel != null)
+            {
+                Debug.WriteLine($"Query is: {_addProductViewModel.SearchBoxContents}");
+                if (string.IsNullOrWhiteSpace(_addProductViewModel.SearchBoxContents))
+                {
+                    Debug.WriteLine($"Query was empty.");
+                    _addProductViewModel.SelectedItem = null;
+                    return;
+                }
+                var match = _addProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_addProductViewModel.SearchBoxContents));
+                if (match == null)
+                {
+                    Debug.WriteLine($"No matches found.");
+                    return;
+                }
+
+                Debug.WriteLine($"Match found for \"{_addProductViewModel.SearchBoxContents}\": {match.Name}");
+                _addProductViewModel.SelectedItem = match;
+                return;
+            }
+
+            if(_modifyProductViewModel != null)
+            {
+                Debug.WriteLine($"Query is: {_modifyProductViewModel.SearchBoxContents}");
+                if (string.IsNullOrWhiteSpace(_modifyProductViewModel.SearchBoxContents))
+                {
+                    Debug.WriteLine($"Query was empty.");
+                    _modifyProductViewModel.SelectedItem = null;
+                    return;
+                }
+                var match = _modifyProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_modifyProductViewModel.SearchBoxContents));
+                if (match == null)
+                {
+                    Debug.WriteLine($"No matches found.");
+                    return;
+                }
+
+                Debug.WriteLine($"Match found for \"{_modifyProductViewModel.SearchBoxContents}\": {match.Name}");
+                _modifyProductViewModel.SelectedItem = match;
+                return;
+            }
         }
     }
 }
