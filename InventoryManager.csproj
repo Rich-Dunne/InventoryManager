@@ -70,7 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\DeletePartCommand.cs" />
     <Compile Include="Commands\DeleteProductCommand.cs" />
+    <Compile Include="Commands\NavigateModifyProductCommand.cs" />
+    <Compile Include="Commands\SaveModifiedProductCommand.cs" />
+    <Compile Include="Commands\SearchProductCommand.cs" />
     <Compile Include="Commands\SearchPartCommand.cs" />
     <Compile Include="Commands\SaveNewProductCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
@@ -82,6 +86,7 @@
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Validators\NameValidator.cs" />
     <Compile Include="ViewModels\AddPartViewModel.cs" />
+    <Compile Include="ViewModels\ModifyProductViewModel.cs" />
     <Compile Include="ViewModels\AddProductViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ErrorsViewModel.cs" />
@@ -89,6 +94,9 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\AddPartView.xaml.cs">
       <DependentUpon>AddPartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModifyProductView.xaml.cs">
+      <DependentUpon>ModifyProductView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddProductView.xaml.cs">
       <DependentUpon>AddProductView.xaml</DependentUpon>
@@ -111,6 +119,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\AddPartView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ModifyProductView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
