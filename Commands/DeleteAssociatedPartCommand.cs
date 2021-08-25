@@ -4,21 +4,32 @@ namespace InventoryManager.Commands
 {
     public class DeleteAssociatedPartCommand : CommandBase
     {
-        private AddProductViewModel _viewModel;
+        private AddProductViewModel _addProductViewModel;
+        private ModifyProductViewModel _modifyProductViewModel;
 
         public DeleteAssociatedPartCommand(AddProductViewModel viewModel)
         {
-            _viewModel = viewModel;
+            _addProductViewModel = viewModel;
+        }
+
+        public DeleteAssociatedPartCommand(ModifyProductViewModel viewModel)
+        {
+            _modifyProductViewModel = viewModel;
         }
 
         public override void Execute(object part)
         {
-            if(_viewModel.SelectedItem == null)
+            if (_addProductViewModel != null && _addProductViewModel.SelectedItem != null)
             {
+                _addProductViewModel.AssociatedParts.Remove((Part)_addProductViewModel.SelectedItem);
                 return;
             }
 
-            _viewModel.AssociatedParts.Remove((Part)_viewModel.SelectedItem);
+            if (_modifyProductViewModel != null && _modifyProductViewModel.SelectedItem != null)
+            {
+                _modifyProductViewModel.TempAssociatedParts.Remove((Part)_modifyProductViewModel.SelectedItem);
+                return;
+            }
         }
     }
 }
