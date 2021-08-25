@@ -1,0 +1,267 @@
+﻿<UserControl x:Class="InventoryManager.Views.ModifyProductView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InventoryManager.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <!--https://www.codeproject.com/Articles/15239/Validation-in-Windows-Presentation-Foundation-->
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Validation.ErrorTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <DockPanel LastChildFill="True">
+                                <TextBlock DockPanel.Dock="Right" 
+                                    Foreground="Red"
+                                    Margin="5 0 0 0"
+                                    FontSize="10pt"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding ErrorContent}"/>
+                                <Border BorderBrush="Red" BorderThickness="1">
+                                    <AdornedElementPlaceholder />
+                                </Border>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <!-- Row 2 -->
+        <Label Grid.Column="1" Grid.ColumnSpan="5" 
+               Grid.Row="2" 
+               FontSize="20" FontWeight="Bold" 
+               Content="Inventory Manager - Modify Product"/>
+
+        <!-- Row 3 -->
+        <TextBlock Text="{Binding Parts.Count, StringFormat=All Candidate Parts (\{0\})}"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Grid.Row="3" 
+            FontSize="16"/>
+
+        <!-- Row 4 -->
+        <TextBox x:Name="searchBox"
+            Grid.Column="1" Grid.ColumnSpan="3" 
+            Grid.Row="4"
+            Width="200" Height="20"
+            HorizontalAlignment="Left"
+            Text="{Binding SearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <Button Grid.Column="4" Grid.Row="4"
+                Width="75" Height="20"
+                HorizontalAlignment="Right"
+                Content="Search"
+                Command="{Binding SearchPartCommand}"/>
+
+        <Label Grid.Column="5" Grid.Row="4" Grid.RowSpan="1" Margin="20 0 0 0" Content="Product ID" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="4" Grid.RowSpan="1" 
+                 Width="100" Height="20" 
+                 Margin="20 0 0 0" 
+                 IsEnabled="false"
+                 Text="{Binding ProductID, Mode=OneWay}" />
+
+        <!-- Row 5 -->
+        <DataGrid x:Name="dataGridAllParts"
+                  AutoGenerateColumns="False"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="4"
+                  ColumnWidth="Auto"
+                  Grid.Row="5"
+                  Grid.RowSpan="5"
+                  IsReadOnly="True"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  ItemsSource="{Binding Parts}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Part ID"
+                    Width="50"
+                    Binding="{Binding PartID}"/>
+
+                <DataGridTextColumn
+                    Header="Part Name"
+                    Width="100"
+                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn
+                    Header="Price"
+                    Width="75"
+                    Binding="{Binding Price}"/>
+
+                <DataGridTextColumn
+                    Header="Inventory"
+                    Width="60"
+                    Binding="{Binding Inventory}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label Grid.Column="5" Grid.Row="5" Grid.RowSpan="1" Margin="20 0 0 0" Content="Name" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="5" Grid.RowSpan="1" 
+                 Width="100" Height="20" 
+                 Margin="20 0 0 0"
+                 Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"/>
+
+        
+        <!-- Row 6 -->
+        <Label Grid.Column="5" Grid.Row="6" Grid.RowSpan="1" Margin="20 0 0 0" Content="Inventory" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="6" Grid.RowSpan="1" 
+                 Width="100" Height="20"
+                 Margin="20 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding ProductInventory, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 7 -->
+        <Label Grid.Column="5" Grid.Row="7" Grid.RowSpan="1" Margin="20 0 0 0" Content="Price" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="7" Grid.RowSpan="1" 
+                 Width="100" Height="20"
+                 Margin="20 0 0 0"
+                 PreviewTextInput="PreviewPriceInput"
+                 DataObject.Pasting="TextBox_PricePasting"
+                 Text="{Binding ProductPrice, StringFormat={}{0:C}, UpdateSourceTrigger=PropertyChanged}"/>
+
+        
+
+        <!-- Row 8 -->
+        <Label Grid.Column="5" Grid.Row="8" Grid.RowSpan="1" Margin="20 0 0 0" Content="Min" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="8" Grid.RowSpan="1" 
+                 Width="100" Height="20"
+                 Margin="20 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding ProductMin, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 9 -->
+        <Label Grid.Column="5" Grid.Row="9" Grid.RowSpan="1" Margin="20 0 0 0" Content="Max" />
+        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
+                 Grid.Row="9" Grid.RowSpan="1" 
+                 Width="100" Height="20"
+                 Margin="20 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding ProductMax, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Row 10 -->
+        <Button Grid.Column="5" Grid.ColumnSpan="2" 
+                Grid.Row="10"
+                Width="75"        
+                HorizontalAlignment="Right"
+                Content="Cancel"
+                Command="{Binding NavigateHomeCommand}"/>
+
+        <Button Grid.Column="7" Grid.Row="10"
+                Width="75"
+                HorizontalAlignment="Right"
+                Content="Save"
+                Command="{Binding SaveModifiedProductCommand}"/>
+
+        <Button Grid.Column="4" Grid.Row="10" 
+                Width="75"
+                HorizontalAlignment="Right"
+                Content="Add"
+                Command="{Binding AddAssociatedPartCommand}"/>
+
+        <!-- Row 12 -->
+        <TextBlock Text="{Binding TempAssociatedParts.Count, StringFormat=Associated Parts (\{0\})}"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Grid.Row="12" 
+            FontSize="16"/>
+
+        <!-- Row 13 -->
+        <DataGrid x:Name="dataGridAssociatedParts"
+                  AutoGenerateColumns="False"
+                  Grid.Column="1"
+                  Grid.ColumnSpan="4"
+                  ColumnWidth="Auto"
+                  HorizontalAlignment="Left"
+                  Grid.Row="13"
+                  Grid.RowSpan="6"
+                  IsReadOnly="True"
+                  CanUserResizeRows="False"
+                  HeadersVisibility="Column"
+                  ItemsSource="{Binding TempAssociatedParts}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Header="Part ID"
+                    Width="50"
+                    Binding="{Binding PartID}"/>
+
+                <DataGridTextColumn
+                    Header="Part Name"
+                    Width="100"
+                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn
+                    Header="Price"
+                    Width="75"
+                    Binding="{Binding Price}"/>
+
+                <DataGridTextColumn
+                    Header="Inventory"
+                    Width="60"
+                    Binding="{Binding Inventory}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!-- Row 19 -->
+        <Button Grid.Column="4" Grid.Row="19"
+                Width="75"
+                HorizontalAlignment="Right"
+                Content="Delete"
+                Command="{Binding DeleteAssociatedPartCommand}"
+                CommandParameter="{Binding ElementName=dataGridAssociatedParts, Path=SelectedItem}"/>
+    </Grid>
+</UserControl>
