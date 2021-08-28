@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace InventoryManager.Views
 {
@@ -23,6 +13,38 @@ namespace InventoryManager.Views
         public AddPartView()
         {
             InitializeComponent();
+        }
+
+        private void PreviewIntInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsIntInputValid(e.Text);
+        }
+
+        private bool IsIntInputValid(string text)
+        {
+            var match = Regex.Match(text, @"^[\d]+$");
+            return match.Success;
+        }
+
+        private void PreviewPriceInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsPriceInputValid(e.Text);
+        }
+
+        private bool IsPriceInputValid(string text)
+        {
+            var match = Regex.Match(text, @"^[1-9]\d{0,2}(\.\d{3})*(,\d+)?$");
+            return match.Success;
+        }
+
+        private void TextBox_IntPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            e.CancelCommand();
+        }
+
+        private void TextBox_PricePasting(object sender, DataObjectPastingEventArgs e)
+        {
+            e.CancelCommand();
         }
     }
 }
