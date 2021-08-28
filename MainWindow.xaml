@@ -8,7 +8,9 @@
         xmlns:ViewModels="clr-namespace:InventoryManager.ViewModels" x:Class="InventoryManager.MainWindow"
         mc:Ignorable="d"
         Title="Inventory Manager" Height="400" Width="700"
-        x:Name="PrimaryWindow">
+        x:Name="PrimaryWindow"
+        SizeToContent="WidthAndHeight" >
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <LinearGradientBrush.RelativeTransform>
@@ -51,9 +53,9 @@
                 <DataTemplate DataType="{x:Type ViewModels:AddPartViewModel}">
                     <Views:AddPartView/>
                 </DataTemplate>
-                <!--<DataTemplate DataType="{x:Type ViewModels:ModifyPartViewModel}">
+                <DataTemplate DataType="{x:Type ViewModels:ModifyPartViewModel}">
                     <Views:ModifyPartView/>
-                </DataTemplate>-->
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
