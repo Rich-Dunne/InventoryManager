@@ -11,7 +11,7 @@ namespace InventoryManager
     internal static class Inventory
     {
         internal static ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
-        internal static BindingList<Part> Parts { get; } = new BindingList<Part>();
+        internal static ObservableCollection<Part> Parts { get; set; } = new ObservableCollection<Part>();
         internal static Queue<int> DeletedProductIDs { get; private set; } = new Queue<int>();
         internal static Queue<int> DeletedPartIDs { get; private set; } = new Queue<int>();
 
@@ -89,19 +89,20 @@ namespace InventoryManager
         internal static void UpdateProduct(int productID, Product product)
         {
             var productToUpdate = Products.FirstOrDefault(x => x.ProductID == productID);
+            if(productToUpdate == null)
+            {
+                Debug.WriteLine($"productToUpdate is null.");
+                return;
+            }
+
             productToUpdate.ProductID = product.ProductID;
             productToUpdate.Name = product.Name;
             productToUpdate.Inventory = product.Inventory;
             productToUpdate.Price = product.Price;
             productToUpdate.Min = product.Min;
             productToUpdate.Max = product.Max;
-            productToUpdate.AssociatedParts = product.AssociatedParts;
-            if (productToUpdate != null)
-            {
-                productToUpdate = product;
-                Debug.WriteLine($"\"{productToUpdate.Name}\" updated.");
-                Debug.WriteLine($"\"{productToUpdate.Name}\" inventory: {productToUpdate.Inventory}.");
-            }
+            //productToUpdate = product;
+            Debug.WriteLine($"\"{productToUpdate.Name}\" updated.");
         }
 
         /// <summary>
@@ -152,7 +153,33 @@ namespace InventoryManager
         /// <param name="part"></param>
         internal static void UpdatePart(int partID, Part part)
         {
+            var partToUpdate = Parts.FirstOrDefault(x => x.PartID == partID);
+            if(partToUpdate == null)
+            {
+                Debug.WriteLine($"partToUpdate is null.");
+                return;
+            }
+            Debug.WriteLine($"Part type is {part.GetType().Name}");
 
+            if(part.GetType() != partToUpdate.GetType())
+            {
+                Debug.WriteLine($"Part types are different.");
+                DeletePart(partToUpdate);
+                DeletedPartIDs.Dequeue();
+                AddPart(part);
+                Debug.WriteLine($"\"{partToUpdate.Name}\" updated as new part.");
+                return;
+            }
+
+            partToUpdate.PartID = part.PartID;
+            partToUpdate.Name = part.Name;
+            partToUpdate.Inventory = part.Inventory;
+            partToUpdate.Price = part.Price;
+            partToUpdate.Min = part.Min;
+            partToUpdate.Max = part.Max;
+            partToUpdate = part;
+            Debug.WriteLine($"partToUpdate type is {partToUpdate.GetType().Name}");
+            Debug.WriteLine($"\"{partToUpdate.Name}\" updated.");
         }
     }
 }
