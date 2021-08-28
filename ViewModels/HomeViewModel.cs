@@ -47,32 +47,86 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private BindingList<Part> _parts = Inventory.Parts;
-        public BindingList<Part> Parts 
+        //private ObservableCollection<Part> _parts = Inventory.Parts;
+        public ObservableCollection<Part> Parts 
         {
-            get => _parts; 
+            get => Inventory.Parts; 
             set
             {
-                _parts = value;
+                Inventory.Parts = value;
                 OnPropertyChanged(nameof(Parts));
             }
         }
         public string ProductSearchBoxContents { get; set; } = "";
         public string PartSearchBoxContents { get; set; } = "";
 
-        private object _selectedItem = null;
-        public object SelectedItem
+        private Part _selectedPart = null;
+        public Part SelectedPart
         {
-            get => _selectedItem;
+            get => _selectedPart;
             set
             {
-                _selectedItem = value;
-                OnPropertyChanged("SelectedItem");
+                _selectedPart = value;
+                OnPropertyChanged(nameof(SelectedPart));
+
+                if(_selectedPart == null)
+                {
+                    Debug.Write($"Selected Part is null");
+                    PartSelected = false;
+                }
+                else
+                {
+                    Debug.Write($"A Part is selected");
+                    PartSelected = true;
+                    SelectedProduct = null;
+                }
             }
         }
 
-        // TODO:  Product data grid is not updating
-        // TODO:  Disable Delete/Modify buttons when SelectedItem is null
+        private Product _selectedProduct = null;
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                _selectedProduct = value;
+                OnPropertyChanged(nameof(SelectedProduct));
+
+                if (SelectedProduct == null)
+                {
+                    Debug.Write($"Selected Product is null");
+                    ProductSelected = false;
+                }
+                else
+                {
+                    Debug.Write($"A Product is selected");
+                    ProductSelected = true;
+                    SelectedPart = null;
+                }
+            }
+        }
+
+        private bool _productSelected = false;
+        public bool ProductSelected
+        {
+            get => _productSelected;
+            set
+            {
+                _productSelected = value;
+                OnPropertyChanged(nameof(ProductSelected));
+            }
+        }
+
+        private bool _partSelected = false;
+        public bool PartSelected
+        {
+            get => _partSelected;
+            set
+            {
+                _partSelected = value;
+                OnPropertyChanged(nameof(PartSelected));
+            }
+        }
 
         public HomeViewModel(NavigationStore navigationStore)
         {
@@ -83,7 +137,7 @@ namespace InventoryManager.ViewModels
 
             SearchPartCommand = new SearchPartCommand(this);
             NavigateAddPartCommand = new NavigateAddPartCommand(navigationStore);
-            NavigateModifyPartCommand = new NavigateModifyProductCommand(navigationStore, this);
+            NavigateModifyPartCommand = new NavigateModifyPartCommand(navigationStore, this);
             DeletePartCommand = new DeletePartCommand(this);
             CloseWindowCommand = new RelayCommand<Window>(CloseWindow);
             Products.CollectionChanged += Products_CollectionChanged;
