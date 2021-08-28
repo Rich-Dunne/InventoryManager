@@ -1,0 +1,258 @@
+﻿<UserControl x:Class="InventoryManager.Views.ModifyPartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InventoryManager.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+    
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Validation.ErrorTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <DockPanel LastChildFill="True">
+                                <TextBlock DockPanel.Dock="Right" 
+                                    Foreground="Red"
+                                    Margin="5 0 0 0"
+                                    FontSize="10pt"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding ErrorContent}"/>
+                                <Border BorderBrush="Red" BorderThickness="1">
+                                    <AdornedElementPlaceholder />
+                                </Border>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <!-- Row 2 -->
+        <Label Grid.Column="1" Grid.Row="2" 
+               FontSize="20" FontWeight="Bold" 
+               Content="Inventory Manager - Modify Part"/>
+
+        <!-- Row 4 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="3"
+                    Margin="20 0 0 0">
+            <Label  Content="Source" />
+            <StackPanel Orientation="Vertical"
+                        Margin="55 0 0 0">
+                <RadioButton Content="In-house"
+                             x:Name="rbInHouse"
+                             IsChecked="{Binding IsInHousePart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <RadioButton Content="Outsourced"
+                             Margin="0 10 0 10"
+                             x:Name="rbOutsourced"
+                             IsChecked="{Binding IsOutsourcedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Row 5 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="4"
+                    Margin="20 0 0 0">
+            <Label  Content="Part ID" />
+            <TextBox Width="100" Height="20" 
+                 Margin="55 0 0 0" 
+                 IsEnabled="false"
+                 Text="{Binding PartID, Mode=OneWay}" />
+        </StackPanel>
+        
+        <!-- Row 6 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="5"
+                    Margin="20 0 0 0">
+            <Label HorizontalAlignment="Left" Content="Name" />
+            <TextBox
+                 Width="100" Height="20" 
+                 Margin="59 0 0 0"
+                 Text="{Binding PartName, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <!-- Row 7 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="6">
+            <Label Margin="20 0 0 0" Content="Inventory" />
+            <TextBox
+                 Width="100" Height="20"
+                 Margin="41 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding PartInventory, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <!-- Row 8 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="7"
+                    Margin="20 0 0 0">
+            <Label Content="Price" />
+            <TextBox
+                 Width="100" Height="20"
+                 Margin="65 0 0 0"
+                 PreviewTextInput="PreviewPriceInput"
+                 DataObject.Pasting="TextBox_PricePasting"
+                 Text="{Binding PartPrice, StringFormat={}{0:C}, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <!-- Row 9 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="8"
+                    Margin="20 0 0 0">
+            <Label Content="Min" />
+            <TextBox
+                 Width="100" Height="20"
+                 Margin="71 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding PartMin, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <!-- Row 10 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="9"
+                    Margin="20 0 0 0">
+            <Label Content="Max" />
+            <TextBox
+                 Width="100" Height="20"
+                 Margin="69 0 0 0"
+                 PreviewTextInput="PreviewIntInput"
+                 DataObject.Pasting="TextBox_IntPasting"
+                 Text="{Binding PartMax, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <!-- Row 11 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="10"
+                    Margin="20 0 0 0">
+            <Grid>
+                <Label Content="Company Name">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=rbOutsourced, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <Label Content="Machine ID">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=rbInHouse, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Grid>
+            
+            <Grid>
+                <TextBox
+                    Width="100" Height="20"
+                    Margin="5 0 0 0"
+                    PreviewTextInput="PreviewIntInput"
+                    DataObject.Pasting="TextBox_IntPasting"
+                    Text="{Binding MachineID, UpdateSourceTrigger=PropertyChanged}">
+
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=rbInHouse, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                
+                <TextBox
+                    Width="100" Height="20"
+                    Margin="5 0 0 0"
+                    Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}">
+
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=rbOutsourced, Path=IsChecked}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </Grid>
+            
+        </StackPanel>
+
+        <!-- Row 12 -->
+
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="1"
+                    Grid.Row="11"
+                    Margin="0 5"
+                    HorizontalAlignment="Center">
+            <Button
+                Padding="5"
+                Margin="5 0 0 0"
+                Content="Cancel"
+                Command="{Binding NavigateHomeCommand}"/>
+
+            <Button
+                Padding="5"
+                Margin="5 0 0 0"
+                Content="Save"
+                Command="{Binding SaveModifiedPartCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
