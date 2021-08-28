@@ -111,7 +111,7 @@
                     HeadersVisibility="Column"
                     ItemsSource="{Binding Products}"
                     SelectionMode="Single"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             
             <DataGrid.Columns>
                 <DataGridTextColumn
@@ -152,7 +152,7 @@
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ItemsSource="{Binding Parts}"
                 SelectionMode="Single"
-                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                SelectedItem="{Binding SelectedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn
@@ -188,6 +188,7 @@
                     Padding="5"
                     Margin="5 0 0 0"
                     HorizontalAlignment="Center"
+                    IsEnabled="{Binding ProductSelected}"
                     Command="{Binding DeleteProductCommand}"/>
 
             <Button x:Name="btnModifyProduct"
@@ -195,6 +196,7 @@
                     Padding="5"
                     Margin="5 0 0 0"
                     HorizontalAlignment="Center"
+                    IsEnabled="{Binding ProductSelected}"
                     Command="{Binding NavigateModifyProductCommand}"/>
 
             <Button x:Name="btnAddProduct"
@@ -216,6 +218,7 @@
                     Padding="5"
                     Margin="5 0 0 0"
                     HorizontalAlignment="Right"
+                    IsEnabled="{Binding PartSelected}"
                     Command="{Binding DeletePartCommand}"/>
 
             <Button x:Name="btnModifyPart"
@@ -223,6 +226,7 @@
                     Padding="5"
                     Margin="5 0 0 0"
                     HorizontalAlignment="Right"
+                    IsEnabled="{Binding PartSelected}"
                     Command="{Binding NavigateModifyPartCommand}"/>
 
             <Button x:Name="btnAddPart"
