@@ -17,7 +17,7 @@ namespace InventoryManager.Views
 
         private void PreviewIntInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsIntInputValid(e.Text);
+            e.Handled = IsIntInputValid(e.Text);
         }
 
         private bool IsIntInputValid(string text)
