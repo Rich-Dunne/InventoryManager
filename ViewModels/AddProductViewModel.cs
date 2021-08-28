@@ -22,7 +22,7 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region DataGridSources
-        public BindingList<Part> Parts { get; set; } = Inventory.Parts;
+        public ObservableCollection<Part> Parts { get; set; } = Inventory.Parts;
         public ObservableCollection<Part> AssociatedParts { get; } = new ObservableCollection<Part>();
         #endregion
 
@@ -66,7 +66,7 @@ namespace InventoryManager.ViewModels
             {
                 _productPrice = value;
                 _errorsViewModel.ClearErrors(nameof(ProductPrice));
-                if (_productPrice > 50)
+                if (_productPrice < 0)
                 {
                     _errorsViewModel.AddError(nameof(ProductPrice), "Value must be at least 0");
                 }
@@ -83,15 +83,6 @@ namespace InventoryManager.ViewModels
             {
                 _productMin = value;
                 ValidateInput();
-                //_errorsViewModel.ClearErrors(nameof(ProductMin));
-                //if (_productMin > ProductMax)
-                //{
-                //    _errorsViewModel.AddError(nameof(ProductMin), "Min must be less than Max");
-                //}
-                //if (_productMin > ProductInventory)
-                //{
-                //    _errorsViewModel.AddError(nameof(ProductMin), "Min must be less than Inventory");
-                //}
                 OnPropertyChanged(nameof(ProductMin));
             }
         }
@@ -105,15 +96,6 @@ namespace InventoryManager.ViewModels
             {
                 _productMax = value;
                 ValidateInput();
-                //_errorsViewModel.ClearErrors(nameof(ProductMax));
-                //if (_productMax < ProductMin)
-                //{
-                //    _errorsViewModel.AddError(nameof(ProductMax), "Max must be more than Min");
-                //}
-                //if (_productMax < ProductInventory)
-                //{
-                //    _errorsViewModel.AddError(nameof(ProductMax), "Max must be more than Inventory");
-                //}
                 OnPropertyChanged(nameof(ProductMax));
             }
         }
@@ -148,10 +130,7 @@ namespace InventoryManager.ViewModels
             ProductID = GetNewProductID();
         }
 
-        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-        {
-            ErrorsChanged?.Invoke(this, e);
-        }
+        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e) => ErrorsChanged?.Invoke(this, e);
 
         private int GetNewProductID()
         {
