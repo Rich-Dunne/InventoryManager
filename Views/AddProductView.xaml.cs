@@ -17,12 +17,12 @@ namespace InventoryManager.Views
 
         private void PreviewIntInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = IsIntInputValid(e.Text);
+            e.Handled = !IsIntInputValid(e.Text);
         }
 
         private bool IsIntInputValid(string text)
         {
-            var match = Regex.Match(text, @"^[\S\d]+$");
+            var match = Regex.Match(text, @"^[\d]+$");
             return match.Success;
         }
 
