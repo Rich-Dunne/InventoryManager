@@ -156,8 +156,6 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        // TODO:  Change selected item highlight color
-
         public ModifyProductViewModel(NavigationStore navigationStore, HomeViewModel viewModel)
         {
             _homeViewModel = viewModel;
