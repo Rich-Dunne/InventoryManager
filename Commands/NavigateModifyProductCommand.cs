@@ -16,7 +16,7 @@ namespace InventoryManager.Commands
 
         public override void Execute(object parameter)
         {
-            if(_viewModel.SelectedItem == null)
+            if(_viewModel.SelectedProduct == null)
             {
                 return;
             }

@@ -1,5 +1,4 @@
 ﻿using InventoryManager.Models;
-using InventoryManager.Stores;
 using InventoryManager.ViewModels;
 using System.Windows;
 
@@ -15,12 +14,12 @@ namespace InventoryManager.Commands
 
         public override void Execute(object parameter)
         {
-            if(_viewModel.SelectedItem == null)
+            if(_viewModel.SelectedProduct == null)
             {
                 return;
             }
 
-            var productToRemove = (Product)_viewModel.SelectedItem;
+            var productToRemove = (Product)_viewModel.SelectedProduct;
             if(productToRemove.AssociatedParts?.Count > 0)
             {
                 MessageBox.Show($"Associated parts must be removed from \"{productToRemove.Name}\" before it can be deleted.");

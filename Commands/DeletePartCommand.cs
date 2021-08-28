@@ -1,6 +1,4 @@
-﻿using InventoryManager.Models;
-using InventoryManager.Stores;
-using InventoryManager.ViewModels;
+﻿using InventoryManager.ViewModels;
 using System.Windows;
 
 namespace InventoryManager.Commands
@@ -15,12 +13,12 @@ namespace InventoryManager.Commands
 
         public override void Execute(object parameter)
         {
-            if(_viewModel.SelectedItem == null)
+            if(_viewModel.SelectedPart == null)
             {
                 return;
             }
 
-            var partToRemove = (Part)_viewModel.SelectedItem;
+            var partToRemove = (Part)_viewModel.SelectedPart;
           
             var prompt = MessageBox.Show($"Are you sure you want to delete \"{partToRemove.Name}\"?", "Confirm part deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (prompt == MessageBoxResult.Yes)

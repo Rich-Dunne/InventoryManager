@@ -19,7 +19,7 @@ namespace InventoryManager.Commands
             if(string.IsNullOrWhiteSpace(_viewModel.ProductSearchBoxContents))
             {
                 Debug.WriteLine($"Query was empty.");
-                _viewModel.SelectedItem = null;
+                _viewModel.SelectedProduct = null;
                 return;
             }
             var match = _viewModel.Products.FirstOrDefault(x => x.Name.Contains(_viewModel.ProductSearchBoxContents));
@@ -30,7 +30,7 @@ namespace InventoryManager.Commands
             }
 
             Debug.WriteLine($"Match found for \"{_viewModel.ProductSearchBoxContents}\": {match.Name}");
-            _viewModel.SelectedItem = match;
+            _viewModel.SelectedProduct = match;
         }
     }
 }

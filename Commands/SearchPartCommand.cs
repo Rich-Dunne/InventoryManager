@@ -33,7 +33,7 @@ namespace InventoryManager.Commands
                 if (string.IsNullOrWhiteSpace(_homeViewModel.PartSearchBoxContents))
                 {
                     Debug.WriteLine($"Query was empty.");
-                    _homeViewModel.SelectedItem = null;
+                    _homeViewModel.SelectedPart = null;
                     return;
                 }
                 var match = _homeViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_homeViewModel.PartSearchBoxContents));
@@ -44,7 +44,7 @@ namespace InventoryManager.Commands
                 }
 
                 Debug.WriteLine($"Match found for \"{_homeViewModel.PartSearchBoxContents}\": {match.Name}");
-                _homeViewModel.SelectedItem = match;
+                _homeViewModel.SelectedPart = match;
                 return;
             }
 
