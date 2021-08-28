@@ -25,7 +25,7 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region DataGridSources
-        public BindingList<Part> Parts { get; set; } = Inventory.Parts;
+        public ObservableCollection<Part> Parts { get; set; } = Inventory.Parts;
 
         private ObservableCollection<Part> _associatedParts;
         public ObservableCollection<Part> AssociatedParts 
@@ -86,7 +86,7 @@ namespace InventoryManager.ViewModels
             {
                 _productPrice = value;
                 _errorsViewModel.ClearErrors(nameof(ProductPrice));
-                if (_productPrice > 50)
+                if (_productPrice < 0)
                 {
                     _errorsViewModel.AddError(nameof(ProductPrice), "Value must be at least 0");
                 }
@@ -161,7 +161,7 @@ namespace InventoryManager.ViewModels
         public ModifyProductViewModel(NavigationStore navigationStore, HomeViewModel viewModel)
         {
             _homeViewModel = viewModel;
-            ProductBeingModified = (Product)_homeViewModel.SelectedItem;
+            ProductBeingModified = _homeViewModel.SelectedProduct;
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
             AssignFormProperties();
