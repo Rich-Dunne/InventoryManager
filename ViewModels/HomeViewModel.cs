@@ -36,7 +36,6 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        //private BindingList<Product> _products = Inventory.Products;
         public ObservableCollection<Product> Products 
         { 
             get => Inventory.Products; 
@@ -47,7 +46,6 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        //private ObservableCollection<Part> _parts = Inventory.Parts;
         public ObservableCollection<Part> Parts 
         {
             get => Inventory.Parts; 
@@ -71,12 +69,10 @@ namespace InventoryManager.ViewModels
 
                 if(_selectedPart == null)
                 {
-                    Debug.Write($"Selected Part is null");
                     PartSelected = false;
                 }
                 else
                 {
-                    Debug.Write($"A Part is selected");
                     PartSelected = true;
                     SelectedProduct = null;
                 }
@@ -94,12 +90,10 @@ namespace InventoryManager.ViewModels
 
                 if (SelectedProduct == null)
                 {
-                    Debug.Write($"Selected Product is null");
                     ProductSelected = false;
                 }
                 else
                 {
-                    Debug.Write($"A Product is selected");
                     ProductSelected = true;
                     SelectedPart = null;
                 }
@@ -140,27 +134,6 @@ namespace InventoryManager.ViewModels
             NavigateModifyPartCommand = new NavigateModifyPartCommand(navigationStore, this);
             DeletePartCommand = new DeletePartCommand(this);
             CloseWindowCommand = new RelayCommand<Window>(CloseWindow);
-            Products.CollectionChanged += Products_CollectionChanged;
-        }
-
-        private void Products_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (INotifyPropertyChanged item in e.NewItems.OfType<INotifyPropertyChanged>())
-                {
-                    OnPropertyChanged(nameof(item));
-                    //item.PropertyChanged += people_PropertyChanged;
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (INotifyPropertyChanged item in e.OldItems.OfType<INotifyPropertyChanged>())
-                {
-                    OnPropertyChanged(nameof(item));
-                    //item.PropertyChanged -= people_PropertyChanged;
-                }
-            }
         }
 
         private void CloseWindow(Window window) => window?.Close();
