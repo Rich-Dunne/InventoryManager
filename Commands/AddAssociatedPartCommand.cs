@@ -36,6 +36,8 @@ namespace InventoryManager.Commands
                 }
 
                 _addProductViewModel.AssociatedParts.Add(selectedPart);
+                _addProductViewModel.OnPropertyChanged(nameof(_addProductViewModel.AssociatedParts));
+                _addProductViewModel.PartSelected = false;
                 Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
             }
 
@@ -53,6 +55,8 @@ namespace InventoryManager.Commands
                 }
 
                 _modifyProductViewModel.AssociatedParts.Add(selectedPart);
+                _modifyProductViewModel.OnPropertyChanged(nameof(_modifyProductViewModel.AssociatedParts));
+                _modifyProductViewModel.PartSelected = false;
                 _modifyProductViewModel.TempAssociatedParts.Add(selectedPart);
 
                 Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
