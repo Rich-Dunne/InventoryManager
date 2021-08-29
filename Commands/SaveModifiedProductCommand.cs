@@ -14,18 +14,20 @@ namespace InventoryManager.Commands
             _viewModel = viewModel;
         }
 
-        public override void Execute(object part)
+        public override void Execute(object param)
         {
             if(!IsInputValid())
             {
                 return;
             }
 
-            foreach (Part associatedPart in _viewModel.TempAssociatedParts)
+            var modifiedProduct = new Product(_viewModel.ProductID, _viewModel.ProductName, _viewModel.ProductPrice, _viewModel.ProductInventory, _viewModel.ProductMin, _viewModel.ProductMax);
+            foreach (Part part in _viewModel.AssociatedParts)
             {
-                _viewModel.AssociatedParts.Add(associatedPart);
+                modifiedProduct.AddAssociatedPart(part);
             }
-            Inventory.UpdateProduct(_viewModel.ProductID, new Product(_viewModel.ProductID, _viewModel.ProductName, _viewModel.ProductPrice, _viewModel.ProductInventory, _viewModel.ProductMin, _viewModel.ProductMax, _viewModel.AssociatedParts));
+
+            Inventory.UpdateProduct(_viewModel.ProductID, modifiedProduct);
             _viewModel.NavigateHomeCommand.Execute(null);
         }
 
@@ -39,11 +41,6 @@ namespace InventoryManager.Commands
             if (_viewModel.HasErrors)
             {
                 MessageBox.Show($"Please fix the errors before attempting to add a new product.");
-                return false;
-            }
-            if (_viewModel.TempAssociatedParts.Count < 1)
-            {
-                MessageBox.Show($"A product requires at least one associated part.");
                 return false;
             }
 
