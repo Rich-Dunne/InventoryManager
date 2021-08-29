@@ -30,13 +30,13 @@ namespace InventoryManager
             AddPart(new OutsourcedPart("Part 3", 4.75, 5, 2, 6, "Company X"));
             AddPart(new OutsourcedPart("Part 4", 14.99, 12, 2, 6, "Company Y"));
             AddPart(new InHousePart("Part 5", 27.99, 32, 2, 6, 34675));
-            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company Z"));
-            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company ABC"));
-            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            //AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company DEF"));
-            //AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company Z"));
+            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company ABC"));
+            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company DEF"));
+            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
         }
 
         /// <summary>
@@ -67,8 +67,14 @@ namespace InventoryManager
         /// <param name="product"></param>
         internal static bool RemoveProduct(int productID)
         {
+            var productToRemove = Products.FirstOrDefault(x => x.ProductID == productID);
+            if(productToRemove == null)
+            {
+                return false;
+            }
+
             DeletedProductIDs.Enqueue(productID);
-            Products.Remove(Products.FirstOrDefault(x => x.ProductID == productID));
+            Products.Remove(productToRemove);
             return true;
         }
 
@@ -76,11 +82,8 @@ namespace InventoryManager
         /// Look up a product by it's <paramref name="productID"/>
         /// </summary>
         /// <param name="productID"></param>
-        /// <returns>A <seealso cref="Product">Product</seealso></returns>
-        internal static Product LookupProduct(int productID)
-        {
-            return null;
-        }
+        /// <returns>A <seealso cref="Product">Product</seealso> or null</returns>
+        internal static Product LookupProduct(int productID) => Products.FirstOrDefault(x => x.ProductID == productID);
 
         /// <summary>
         /// Updates an existing product with a matching <paramref name="productID"/> using information from a new <paramref name="product"/>
@@ -101,7 +104,11 @@ namespace InventoryManager
             productToUpdate.Price = product.Price;
             productToUpdate.Min = product.Min;
             productToUpdate.Max = product.Max;
-            //productToUpdate = product;
+            productToUpdate.AssociatedParts.Clear();
+            foreach(Part part in product.AssociatedParts)
+            {
+                productToUpdate.AddAssociatedPart(part);
+            }
             Debug.WriteLine($"\"{productToUpdate.Name}\" updated.");
         }
 
@@ -132,8 +139,14 @@ namespace InventoryManager
         /// <param name="part"></param>
         internal static bool DeletePart(Part part)
         {
+            var partToRemove = LookupPart(part.PartID);
+            if(partToRemove == null)
+            {
+                return false;
+            }
+
             DeletedPartIDs.Enqueue(part.PartID);
-            Parts.Remove(Parts.FirstOrDefault(x => x.PartID == part.PartID));
+            Parts.Remove(partToRemove);
             return true;
         }
 
@@ -141,11 +154,8 @@ namespace InventoryManager
         /// Look up a product by it's <paramref name="partID"/>
         /// </summary>
         /// <param name="partID"></param>
-        /// <returns>A <seealso cref="Part">Part</seealso></returns>
-        internal static Part LookupPart(int partID)
-        {
-            return null;
-        }
+        /// <returns>A <seealso cref="Part">Part</seealso> or null</returns>
+        internal static Part LookupPart(int partID) => Parts.FirstOrDefault(x => x.PartID == partID);
 
         /// <summary>
         /// Updates an existing part with a matching <paramref name="partID"/> using information from a new <paramref name="part"/>
@@ -163,7 +173,6 @@ namespace InventoryManager
 
             if(part.GetType() != partToUpdate.GetType())
             {
-                Debug.WriteLine($"Part types are different.");
                 DeletePart(partToUpdate);
                 DeletedPartIDs.Dequeue();
                 AddPart(part);
@@ -177,8 +186,6 @@ namespace InventoryManager
             partToUpdate.Price = part.Price;
             partToUpdate.Min = part.Min;
             partToUpdate.Max = part.Max;
-            partToUpdate = part;
-            Debug.WriteLine($"partToUpdate type is {partToUpdate.GetType().Name}");
             Debug.WriteLine($"\"{partToUpdate.Name}\" updated.");
         }
     }
