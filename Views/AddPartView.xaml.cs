@@ -33,7 +33,7 @@ namespace InventoryManager.Views
 
         private bool IsPriceInputValid(string text)
         {
-            var match = Regex.Match(text, @"^[1-9]\d{0,2}(\.\d{3})*(,\d+)?$");
+            var match = Regex.Match(text, @"^[0-9]\d{0,2}(\.\d{3})*(,\d+)?$");
             return match.Success;
         }
 
