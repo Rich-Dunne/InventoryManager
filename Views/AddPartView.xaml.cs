@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -23,17 +25,6 @@ namespace InventoryManager.Views
         private bool IsIntInputValid(string text)
         {
             var match = Regex.Match(text, @"^[\d]+$");
-            return match.Success;
-        }
-
-        private void PreviewPriceInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !IsPriceInputValid(e.Text);
-        }
-
-        private bool IsPriceInputValid(string text)
-        {
-            var match = Regex.Match(text, @"^[0-9]\d{0,2}(\.\d{3})*(,\d+)?$");
             return match.Success;
         }
 

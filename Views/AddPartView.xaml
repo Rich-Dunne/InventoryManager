@@ -130,12 +130,11 @@
                     Grid.Column="1" Grid.Row="7"
                     Margin="20 0 0 0">
             <Label Content="Price" />
-            <TextBox
+            <TextBox x:Name="priceTextBox"
                  Width="100" Height="20"
                  Margin="65 0 0 0"
-                 PreviewTextInput="PreviewPriceInput"
                  DataObject.Pasting="TextBox_PricePasting"
-                 Text="{Binding PartPrice, StringFormat={}{0:C}, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding PartPrice, UpdateSourceTrigger=LostFocus}"/>
         </StackPanel>
 
         <!-- Row 9 -->

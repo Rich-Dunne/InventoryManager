@@ -193,9 +193,8 @@
             <TextBox
                  Width="100" Height="20"
                  Margin="64 0 0 0"
-                 PreviewTextInput="PreviewPriceInput"
                  DataObject.Pasting="TextBox_PricePasting"
-                 Text="{Binding ProductPrice, StringFormat={}{0:C}, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding ProductPrice, UpdateSourceTrigger=LostFocus}"/>
         </StackPanel>
 
         <!-- Row 8 -->
