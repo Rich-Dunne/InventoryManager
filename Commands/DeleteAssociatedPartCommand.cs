@@ -1,4 +1,5 @@
 ﻿using InventoryManager.ViewModels;
+using System.Linq;
 
 namespace InventoryManager.Commands
 {
@@ -17,17 +18,18 @@ namespace InventoryManager.Commands
             _modifyProductViewModel = viewModel;
         }
 
-        public override void Execute(object part)
+        public override void Execute(object param)
         {
-            if (_addProductViewModel != null && _addProductViewModel.SelectedItem != null)
+            if(_addProductViewModel != null)
             {
-                _addProductViewModel.AssociatedParts.Remove((Part)_addProductViewModel.SelectedItem);
+                var partToRemove = _addProductViewModel.AssociatedParts.FirstOrDefault(x => x.PartID == _addProductViewModel.SelectedAssociatedPart.PartID);
+                _addProductViewModel.AssociatedParts.Remove(partToRemove);
                 return;
             }
 
-            if (_modifyProductViewModel != null && _modifyProductViewModel.SelectedItem != null)
+            if (_modifyProductViewModel != null)
             {
-                _modifyProductViewModel.TempAssociatedParts.Remove((Part)_modifyProductViewModel.SelectedItem);
+                _modifyProductViewModel.AssociatedParts.Remove(_modifyProductViewModel.SelectedAssociatedPart);
                 return;
             }
         }
