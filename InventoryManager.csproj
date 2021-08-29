@@ -74,6 +74,7 @@
     <Compile Include="Commands\DeleteProductCommand.cs" />
     <Compile Include="Commands\NavigateModifyPartCommand.cs" />
     <Compile Include="Commands\NavigateModifyProductCommand.cs" />
+    <Compile Include="Commands\CancelModifiedProductCommand.cs" />
     <Compile Include="Commands\SaveModifiedProductCommand.cs" />
     <Compile Include="Commands\SaveModifiedPartCommand.cs" />
     <Compile Include="Commands\SaveNewPartCommand.cs" />
