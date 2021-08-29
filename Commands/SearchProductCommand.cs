@@ -1,6 +1,7 @@
 ﻿using InventoryManager.ViewModels;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 
 namespace InventoryManager.Commands
 {
@@ -22,15 +23,28 @@ namespace InventoryManager.Commands
                 _viewModel.SelectedProduct = null;
                 return;
             }
-            var match = _viewModel.Products.FirstOrDefault(x => x.Name.Contains(_viewModel.ProductSearchBoxContents));
-            if(match == null)
+            var matchingName = _viewModel.Products.FirstOrDefault(x => x.Name.Contains(_viewModel.ProductSearchBoxContents));
+            var matchingID = _viewModel.Products.FirstOrDefault(x => x.ProductID.ToString().Contains(_viewModel.ProductSearchBoxContents));
+            if (matchingName == null && matchingID == null)
             {
-                Debug.WriteLine($"No matches found.");
+                MessageBox.Show($"No product names or IDs containing \"{_viewModel.ProductSearchBoxContents}\" were found.", "No results found");
+                _viewModel.SelectedProduct = null;
                 return;
             }
 
-            Debug.WriteLine($"Match found for \"{_viewModel.ProductSearchBoxContents}\": {match.Name}");
-            _viewModel.SelectedProduct = match;
+            if (matchingName != null)
+            {
+                Debug.WriteLine($"Match found for \"{_viewModel.ProductSearchBoxContents}\": {matchingName.Name}");
+                _viewModel.SelectedProduct = matchingName;
+                return;
+            }
+
+            if (matchingID != null)
+            {
+                Debug.WriteLine($"Match found for \"{_viewModel.ProductSearchBoxContents}\": {matchingID.Name}");
+                _viewModel.SelectedProduct = matchingID;
+                return;
+            }
         }
     }
 }

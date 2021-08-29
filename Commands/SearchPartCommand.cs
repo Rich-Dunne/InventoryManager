@@ -1,6 +1,7 @@
 ﻿using InventoryManager.ViewModels;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 
 namespace InventoryManager.Commands
 {
@@ -36,16 +37,28 @@ namespace InventoryManager.Commands
                     _homeViewModel.SelectedPart = null;
                     return;
                 }
-                var match = _homeViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_homeViewModel.PartSearchBoxContents));
-                if (match == null)
+
+                var matchingName = _homeViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_homeViewModel.PartSearchBoxContents));
+                var matchingID = _homeViewModel.Parts.FirstOrDefault(x => x.PartID.ToString().Contains(_homeViewModel.PartSearchBoxContents));
+                if (matchingName == null && matchingID == null)
                 {
-                    Debug.WriteLine($"No matches found.");
+                    MessageBox.Show($"No part names or IDs containing \"{_homeViewModel.PartSearchBoxContents}\" were found.", "No results found");
+                    _homeViewModel.SelectedPart = null;
                     return;
                 }
 
-                Debug.WriteLine($"Match found for \"{_homeViewModel.PartSearchBoxContents}\": {match.Name}");
-                _homeViewModel.SelectedPart = match;
-                return;
+                if (matchingName != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_homeViewModel.PartSearchBoxContents}\": {matchingName.Name}");
+                    _homeViewModel.SelectedPart = matchingName;
+                    return;
+                }
+                if(matchingID != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_homeViewModel.PartSearchBoxContents}\": {matchingID.Name}");
+                    _homeViewModel.SelectedPart = matchingID;
+                    return;
+                }
             }
 
             if (_addProductViewModel != null)
@@ -54,19 +67,32 @@ namespace InventoryManager.Commands
                 if (string.IsNullOrWhiteSpace(_addProductViewModel.SearchBoxContents))
                 {
                     Debug.WriteLine($"Query was empty.");
-                    _addProductViewModel.SelectedItem = null;
-                    return;
-                }
-                var match = _addProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_addProductViewModel.SearchBoxContents));
-                if (match == null)
-                {
-                    Debug.WriteLine($"No matches found.");
+                    _addProductViewModel.SelectedPart = null;
                     return;
                 }
 
-                Debug.WriteLine($"Match found for \"{_addProductViewModel.SearchBoxContents}\": {match.Name}");
-                _addProductViewModel.SelectedItem = match;
-                return;
+                var matchingName = _addProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_addProductViewModel.SearchBoxContents));
+                var matchingID = _addProductViewModel.Parts.FirstOrDefault(x => x.PartID.ToString().Contains(_addProductViewModel.SearchBoxContents));
+                if (matchingName == null && matchingID == null)
+                {
+                    MessageBox.Show($"No part names or IDs containing \"{_addProductViewModel.SearchBoxContents}\" were found.", "No results found");
+                    _addProductViewModel.SelectedPart = null;
+                    return;
+                }
+
+                if (matchingName != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_addProductViewModel.SearchBoxContents}\": {matchingName.Name}");
+                    _addProductViewModel.SelectedPart = matchingName;
+                    return;
+                }
+
+                if(matchingID != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_addProductViewModel.SearchBoxContents}\": {matchingID.Name}");
+                    _addProductViewModel.SelectedPart = matchingID;
+                    return;
+                }
             }
 
             if(_modifyProductViewModel != null)
@@ -75,19 +101,32 @@ namespace InventoryManager.Commands
                 if (string.IsNullOrWhiteSpace(_modifyProductViewModel.SearchBoxContents))
                 {
                     Debug.WriteLine($"Query was empty.");
-                    _modifyProductViewModel.SelectedItem = null;
-                    return;
-                }
-                var match = _modifyProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_modifyProductViewModel.SearchBoxContents));
-                if (match == null)
-                {
-                    Debug.WriteLine($"No matches found.");
+                    _modifyProductViewModel.SelectedPart = null;
                     return;
                 }
 
-                Debug.WriteLine($"Match found for \"{_modifyProductViewModel.SearchBoxContents}\": {match.Name}");
-                _modifyProductViewModel.SelectedItem = match;
-                return;
+                var matchingName = _modifyProductViewModel.Parts.FirstOrDefault(x => x.Name.Contains(_modifyProductViewModel.SearchBoxContents));
+                var matchingID = _modifyProductViewModel.Parts.FirstOrDefault(x => x.PartID.ToString().Contains(_modifyProductViewModel.SearchBoxContents));
+                if (matchingName == null && matchingID == null)
+                {
+                    MessageBox.Show($"No part names or IDs containing \"{_modifyProductViewModel.SearchBoxContents}\" were found.", "No results found");
+                    _modifyProductViewModel.SelectedPart = null;
+                    return;
+                }
+
+                if (matchingName != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_modifyProductViewModel.SearchBoxContents}\": {matchingName.Name}");
+                    _modifyProductViewModel.SelectedPart = matchingName;
+                    return;
+                }
+
+                if(matchingID != null)
+                {
+                    Debug.WriteLine($"Match found for \"{_modifyProductViewModel.SearchBoxContents}\": {matchingID.Name}");
+                    _modifyProductViewModel.SelectedPart = matchingID;
+                    return;
+                }
             }
         }
     }
