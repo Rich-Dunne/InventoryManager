@@ -101,22 +101,92 @@ namespace InventoryManager.ViewModels
         }
         #endregion
 
-        private object _selectedItem = null;
-        public object SelectedItem
+        private Part _selectedPart = null;
+        public Part SelectedPart
         {
-            get => _selectedItem;
+            get => _selectedPart;
             set
             {
-                _selectedItem = value;
-                OnPropertyChanged("SelectedItem");
+                _selectedPart = value;
+                OnPropertyChanged(nameof(SelectedPart));
+
+                if (_selectedPart == null)
+                {
+                    PartSelected = false;
+                }
+                else
+                {
+                    PartSelected = true;
+                }
             }
         }
+
+        private bool _partSelected = false;
+        public bool PartSelected
+        {
+            get => _partSelected;
+            set
+            {
+                _partSelected = value;
+                OnPropertyChanged(nameof(PartSelected));
+            }
+        }
+
+        private Part _selectedAssociatedPart = null;
+        public Part SelectedAssociatedPart
+        {
+            get => _selectedAssociatedPart;
+            set
+            {
+                _selectedAssociatedPart = value;
+                OnPropertyChanged(nameof(SelectedAssociatedPart));
+
+                if (_selectedAssociatedPart == null)
+                {
+                    AssociatedPartSelected = false;
+                }
+                else
+                {
+                    AssociatedPartSelected = true;
+                }
+            }
+        }
+        private bool _associatedPartSelected = false;
+        public bool AssociatedPartSelected
+        {
+            get => _associatedPartSelected;
+            set
+            {
+                _associatedPartSelected = value;
+                OnPropertyChanged(nameof(AssociatedPartSelected));
+            }
+        }
+
         public string SearchBoxContents { get; set; } = "";
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public bool HasErrors => _errorsViewModel.HasErrors;
+        private bool _enableSave = false;
+        public bool EnableSave
+        {
+            get => _enableSave;
+            set
+            {
+                _enableSave = value;
+                OnPropertyChanged(nameof(EnableSave));
+            }
+        }
 
-        // TODO:  Change selected item highlight color
+        private ObservableCollection<Part> _tempAssociatedParts = new ObservableCollection<Part>();
+        public ObservableCollection<Part> TempAssociatedParts
+        {
+            get => _tempAssociatedParts;
+            set
+            {
+                _tempAssociatedParts = value;
+                OnPropertyChanged(nameof(TempAssociatedParts));
+            }
+        }
 
         public AddProductViewModel(NavigationStore navigationStore)
         {
@@ -127,10 +197,15 @@ namespace InventoryManager.ViewModels
             SearchPartCommand = new SearchPartCommand(this);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
+            _errorsViewModel.AddError(nameof(ProductName), "A product name is required.");
             ProductID = GetNewProductID();
         }
 
-        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e) => ErrorsChanged?.Invoke(this, e);
+        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            EnableSave = !HasErrors;
+            ErrorsChanged?.Invoke(this, e);
+        }
 
         private int GetNewProductID()
         {

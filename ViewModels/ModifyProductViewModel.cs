@@ -22,21 +22,22 @@ namespace InventoryManager.ViewModels
         public ICommand DeleteAssociatedPartCommand { get; internal set; }
         public ICommand SaveModifiedProductCommand { get; internal set; }
         public ICommand SearchPartCommand { get; internal set; }
+        public ICommand CancelModifiedProductCommand { get; internal set; }
         #endregion
 
         #region DataGridSources
         public ObservableCollection<Part> Parts { get; set; } = Inventory.Parts;
 
-        private ObservableCollection<Part> _associatedParts;
-        public ObservableCollection<Part> AssociatedParts 
-        { 
-            get => _associatedParts; 
-            set
-            {
-                _associatedParts = value;
-                OnPropertyChanged(nameof(AssociatedParts));
-            }
-        }
+        //private ObservableCollection<Part> _associatedParts;
+        public ObservableCollection<Part> AssociatedParts { get; set; } = new ObservableCollection<Part>();
+        //{ 
+        //    get => _associatedParts; 
+        //    set
+        //    {
+        //        _associatedParts = value;
+        //        OnPropertyChanged(nameof(AssociatedParts));
+        //    }
+        //}
         #endregion
 
         #region FormProperties
@@ -60,14 +61,7 @@ namespace InventoryManager.ViewModels
         private int _productInventory;
         public int ProductInventory
         {
-            get
-            {
-                if(SelectedItem != null)
-                {
-
-                }
-                return _productInventory;
-            }
+            get => _productInventory;
 
             set
             {
@@ -121,16 +115,67 @@ namespace InventoryManager.ViewModels
         }
         #endregion
 
-        private object _selectedItem = null;
-        public object SelectedItem
+        private Part _selectedPart = null;
+        public Part SelectedPart
         {
-            get => _selectedItem;
+            get => _selectedPart;
             set
             {
-                _selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
+                _selectedPart = value;
+                OnPropertyChanged(nameof(SelectedPart));
+
+                if (_selectedPart == null)
+                {
+                    PartSelected = false;
+                }
+                else
+                {
+                    PartSelected = true;
+                }
             }
         }
+
+        private bool _partSelected = false;
+        public bool PartSelected
+        {
+            get => _partSelected;
+            set
+            {
+                _partSelected = value;
+                OnPropertyChanged(nameof(PartSelected));
+            }
+        }
+
+        private Part _selectedAssociatedPart = null;
+        public Part SelectedAssociatedPart
+        {
+            get => _selectedAssociatedPart;
+            set
+            {
+                _selectedAssociatedPart = value;
+                OnPropertyChanged(nameof(SelectedAssociatedPart));
+
+                if (_selectedAssociatedPart == null)
+                {
+                    AssociatedPartSelected = false;
+                }
+                else
+                {
+                    AssociatedPartSelected = true;
+                }
+            }
+        }
+        private bool _associatedPartSelected = false;
+        public bool AssociatedPartSelected
+        {
+            get => _associatedPartSelected;
+            set
+            {
+                _associatedPartSelected = value;
+                OnPropertyChanged(nameof(AssociatedPartSelected));
+            }
+        }
+
         public string SearchBoxContents { get; set; } = "";
         private Product _productBeingModified;
         public Product ProductBeingModified
@@ -145,6 +190,18 @@ namespace InventoryManager.ViewModels
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public bool HasErrors => _errorsViewModel.HasErrors;
+        
+        private bool _enableSave = false;
+        public bool EnableSave
+        {
+            get => _enableSave;
+            set
+            {
+                _enableSave = value;
+                OnPropertyChanged(nameof(EnableSave));
+            }
+        }
+
         private ObservableCollection<Part> _tempAssociatedParts = new ObservableCollection<Part>();
         public ObservableCollection<Part> TempAssociatedParts
         {
@@ -156,44 +213,53 @@ namespace InventoryManager.ViewModels
             }
         }
 
+        private ObservableCollection<Part> _tempDeletedParts = new ObservableCollection<Part>();
+        public ObservableCollection<Part> TempDeletedParts
+        {
+            get => _tempDeletedParts;
+            set
+            {
+                _tempDeletedParts = value;
+                OnPropertyChanged(nameof(TempDeletedParts));
+            }
+        }
+
         public ModifyProductViewModel(NavigationStore navigationStore, HomeViewModel viewModel)
         {
             _homeViewModel = viewModel;
-            ProductBeingModified = _homeViewModel.SelectedProduct;
+            ProductBeingModified = Inventory.LookupProduct(_homeViewModel.SelectedProduct.ProductID);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
             AssignFormProperties();
+            EnableSave = !HasErrors;
+            Debug.WriteLine($"Has errors: {HasErrors}");
 
             NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             SaveModifiedProductCommand = new SaveModifiedProductCommand(this);
             SearchPartCommand = new SearchPartCommand(this);
+            CancelModifiedProductCommand = new CancelModifiedProductCommand(this);
         }
 
         private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
         {
+            EnableSave = !HasErrors;
             ErrorsChanged?.Invoke(this, e);
         }
 
         private void AssignFormProperties()
         {
-            Debug.WriteLine($"Product being modified: {ProductBeingModified.Name}");
             ProductID = ProductBeingModified.ProductID;
             ProductName = ProductBeingModified.Name;
             ProductInventory = ProductBeingModified.Inventory;
             ProductPrice = ProductBeingModified.Price;
             ProductMin = ProductBeingModified.Min;
             ProductMax = ProductBeingModified.Max;
-            AssociatedParts = ProductBeingModified.AssociatedParts;
-            Debug.WriteLine($"Associated parts: {ProductBeingModified.AssociatedParts.Count}");
-            foreach (Part part in AssociatedParts)
+
+            foreach (Part part in ProductBeingModified.AssociatedParts.ToList())
             {
-                if (!TempAssociatedParts.Contains(part))
-                {
-                    TempAssociatedParts.Add(part);
-                    Debug.WriteLine($"Added {part.Name} to TempAssociatedParts.  New count: {TempAssociatedParts.Count}");
-                }
+                AssociatedParts.Add(part);
             }
         }
 
