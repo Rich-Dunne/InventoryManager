@@ -24,12 +24,14 @@ namespace InventoryManager.Commands
             {
                 var partToRemove = _addProductViewModel.AssociatedParts.FirstOrDefault(x => x.PartID == _addProductViewModel.SelectedAssociatedPart.PartID);
                 _addProductViewModel.AssociatedParts.Remove(partToRemove);
+                _addProductViewModel.OnPropertyChanged(nameof(_addProductViewModel.AssociatedParts));
                 return;
             }
 
             if (_modifyProductViewModel != null)
             {
                 _modifyProductViewModel.AssociatedParts.Remove(_modifyProductViewModel.SelectedAssociatedPart);
+                _modifyProductViewModel.OnPropertyChanged(nameof(_modifyProductViewModel.AssociatedParts));
                 return;
             }
         }
