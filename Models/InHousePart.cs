@@ -2,7 +2,7 @@
 {
     internal class InHousePart : Part
     {
-        internal int MachineID { get; set; } = -1;
+        internal int MachineID { get; set; }
 
         internal InHousePart(string name, double price, int inventory, int min, int max, int machineID)
         {
