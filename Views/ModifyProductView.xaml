@@ -29,8 +29,8 @@
                 </Setter>
             </Style>
         </Grid.Resources>
-        
-        
+
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -70,7 +70,8 @@
         </Grid.RowDefinitions>
 
         <!-- Row 2 -->
-        <Label Grid.Column="1" Grid.ColumnSpan="5" 
+        <Label Grid.Column="1"
+               Grid.ColumnSpan="2"
                Grid.Row="2" 
                FontSize="20" FontWeight="Bold" 
                Content="Inventory Manager - Modify Product"/>
@@ -78,143 +79,185 @@
         <!-- Row 3 -->
         <TextBlock Text="{Binding Parts.Count, StringFormat=All Candidate Parts (\{0\})}"
             Grid.Column="1"
-            Grid.ColumnSpan="3"
             Grid.Row="3" 
             FontSize="16"/>
 
         <!-- Row 4 -->
-        <TextBox x:Name="searchBox"
-            Grid.Column="1" Grid.ColumnSpan="3" 
-            Grid.Row="4"
-            Width="200" Height="20"
-            HorizontalAlignment="Left"
-            Text="{Binding SearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-        
-        <Button Grid.Column="4" Grid.Row="4"
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="4"
+                    Margin="0 5 0 5">
+            <TextBox x:Name="partSearchBox"
+                Width="200" Height="20"
+                Text="{Binding PartSearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button
                 Width="75" Height="20"
-                HorizontalAlignment="Right"
+                Margin="55 0 0 0"
                 Content="Search"
                 Command="{Binding SearchPartCommand}"/>
+        </StackPanel>
 
-        <Label Grid.Column="5" Grid.Row="4" Grid.RowSpan="1" Margin="20 0 0 0" Content="Product ID" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="4" Grid.RowSpan="1" 
-                 Width="100" Height="20" 
-                 Margin="20 0 0 0" 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="4"
+                    Margin="20 0 0 0">
+            <Label  Content="Product ID" />
+            <TextBox Width="100" Height="20" 
+                 Margin="34 0 0 0" 
                  IsEnabled="false"
                  Text="{Binding ProductID, Mode=OneWay}" />
+        </StackPanel>
+
 
         <!-- Row 5 -->
-        <DataGrid x:Name="dataGridAllParts"
-                  AutoGenerateColumns="False"
-                  Grid.Column="1"
-                  Grid.ColumnSpan="4"
-                  ColumnWidth="Auto"
-                  Grid.Row="5"
-                  Grid.RowSpan="5"
-                  IsReadOnly="True"
-                  CanUserResizeRows="False"
-                  HeadersVisibility="Column"
-                  ItemsSource="{Binding Parts}"
-                  SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="1" Grid.Row="5"
+                    Grid.RowSpan="5"
+                    x:Name="dgStackPanel">
+            
+            <DataGrid x:Name="dataGridAllParts"
+                AutoGenerateColumns="False"
+                HorizontalAlignment="Left"
+                MaxHeight="120"
+                Width="330"
+                IsReadOnly="True"
+                CanUserResizeRows="False"
+                HeadersVisibility="Column"
+                ItemsSource="{Binding Parts}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FF008BFF"/>
+                                <Setter Property="BorderBrush" Value="#FF0074FF"/>
+                                <Setter Property="Foreground" Value="AliceBlue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
                     Header="Part ID"
                     Width="50"
                     Binding="{Binding PartID}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Part Name"
                     Width="100"
                     Binding="{Binding Name}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Price"
                     Width="75"
                     Binding="{Binding Price}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Inventory"
-                    Width="60"
+                    Width="*"
                     Binding="{Binding Inventory}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <Label Grid.Column="5" Grid.Row="5" Grid.RowSpan="1" Margin="20 0 0 0" Content="Name" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="5" Grid.RowSpan="1" 
-                 Width="100" Height="20" 
-                 Margin="20 0 0 0"
-                 Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"/>
-
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
         
+        <!-- Row 5 -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="5"
+                    Margin="20 0 0 0">
+            <Label HorizontalAlignment="Left" Content="Name" />
+            <TextBox
+                 Width="100" Height="20" 
+                 Margin="58 0 0 0"
+                 Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
         <!-- Row 6 -->
-        <Label Grid.Column="5" Grid.Row="6" Grid.RowSpan="1" Margin="20 0 0 0" Content="Inventory" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="6" Grid.RowSpan="1" 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="6"
+                    Margin="0 0 0 0">
+            <Label Grid.Column="5" Grid.Row="6" Grid.RowSpan="1" Margin="20 0 0 0" Content="Inventory" />
+            <TextBox
                  Width="100" Height="20"
-                 Margin="20 0 0 0"
+                 Margin="40 0 0 0"
                  PreviewTextInput="PreviewIntInput"
                  DataObject.Pasting="TextBox_IntPasting"
                  Text="{Binding ProductInventory, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
 
         <!-- Row 7 -->
-        <Label Grid.Column="5" Grid.Row="7" Grid.RowSpan="1" Margin="20 0 0 0" Content="Price" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="7" Grid.RowSpan="1" 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="7"
+                    Margin="20 0 0 0">
+            <Label Content="Price" />
+            <TextBox
                  Width="100" Height="20"
-                 Margin="20 0 0 0"
+                 Margin="64 0 0 0"
                  PreviewTextInput="PreviewPriceInput"
                  DataObject.Pasting="TextBox_PricePasting"
                  Text="{Binding ProductPrice, StringFormat={}{0:C}, UpdateSourceTrigger=PropertyChanged}"/>
-
-        
+        </StackPanel>
 
         <!-- Row 8 -->
-        <Label Grid.Column="5" Grid.Row="8" Grid.RowSpan="1" Margin="20 0 0 0" Content="Min" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="8" Grid.RowSpan="1" 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="8"
+                    Margin="20 0 0 0">
+            <Label Content="Min" />
+            <TextBox
                  Width="100" Height="20"
-                 Margin="20 0 0 0"
+                 Margin="70 0 0 0"
                  PreviewTextInput="PreviewIntInput"
                  DataObject.Pasting="TextBox_IntPasting"
                  Text="{Binding ProductMin, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
 
         <!-- Row 9 -->
-        <Label Grid.Column="5" Grid.Row="9" Grid.RowSpan="1" Margin="20 0 0 0" Content="Max" />
-        <TextBox Grid.Column="6" Grid.ColumnSpan="2" 
-                 Grid.Row="9" Grid.RowSpan="1" 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2" Grid.Row="9"
+                    Margin="20 0 0 0">
+            <Label Content="Max" />
+            <TextBox
                  Width="100" Height="20"
-                 Margin="20 0 0 0"
+                 Margin="68 0 0 0"
                  PreviewTextInput="PreviewIntInput"
                  DataObject.Pasting="TextBox_IntPasting"
                  Text="{Binding ProductMax, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
 
         <!-- Row 10 -->
-        <Button Grid.Column="5" Grid.ColumnSpan="2" 
-                Grid.Row="10"
-                Width="75"        
-                HorizontalAlignment="Right"
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="2"
+                    Grid.Row="10"
+                    Margin="0 5"
+                    HorizontalAlignment="Right">
+            <Button
+                Padding="5"
+                Margin="5 0 0 0"
                 Content="Cancel"
                 Command="{Binding NavigateHomeCommand}"/>
 
-        <Button Grid.Column="7" Grid.Row="10"
-                Width="75"
-                HorizontalAlignment="Right"
+            <Button
+                Padding="5"
+                Margin="5 0 0 0"
                 Content="Save"
+                IsEnabled="{Binding EnableSave}"
                 Command="{Binding SaveModifiedProductCommand}"/>
-
-        <Button Grid.Column="4" Grid.Row="10" 
-                Width="75"
-                HorizontalAlignment="Right"
-                Content="Add"
-                Command="{Binding AddAssociatedPartCommand}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="1" Grid.Row="10"
+                    Margin="0 5">
+            <Button
+                Padding="5"
+                Margin="272 0 0 0"
+                Content="Add Part"
+                IsEnabled="{Binding PartSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                Command="{Binding Path=AddAssociatedPartCommand}"/>
+        </StackPanel>
 
         <!-- Row 12 -->
-        <TextBlock Text="{Binding TempAssociatedParts.Count, StringFormat=Associated Parts (\{0\})}"
+        <TextBlock Text="{Binding AssociatedParts.Count, StringFormat=Associated Parts (\{0\})}"
             Grid.Column="1"
-            Grid.ColumnSpan="2"
             Grid.Row="12" 
             FontSize="16"/>
 
@@ -222,45 +265,61 @@
         <DataGrid x:Name="dataGridAssociatedParts"
                   AutoGenerateColumns="False"
                   Grid.Column="1"
-                  Grid.ColumnSpan="4"
                   ColumnWidth="Auto"
+                  MaxHeight="120"
+                  MinColumnWidth="82"
                   HorizontalAlignment="Left"
                   Grid.Row="13"
                   Grid.RowSpan="6"
                   IsReadOnly="True"
                   CanUserResizeRows="False"
                   HeadersVisibility="Column"
-                  ItemsSource="{Binding TempAssociatedParts}"
+                  ItemsSource="{Binding AssociatedParts}"
                   SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding SelectedAssociatedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FF008BFF"/>
+                            <Setter Property="BorderBrush" Value="#FF0074FF"/>
+                            <Setter Property="Foreground" Value="AliceBlue"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Part ID"
-                    Width="50"
+                    Width="auto"
                     Binding="{Binding PartID}"/>
 
                 <DataGridTextColumn
                     Header="Part Name"
-                    Width="100"
+                    Width="auto"
                     Binding="{Binding Name}"/>
 
                 <DataGridTextColumn
                     Header="Price"
-                    Width="75"
+                    Width="auto"
                     Binding="{Binding Price}"/>
 
                 <DataGridTextColumn
                     Header="Inventory"
-                    Width="60"
+                    Width="*"
                     Binding="{Binding Inventory}"/>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <!-- Row 19 -->
-        <Button Grid.Column="4" Grid.Row="19"
-                Width="75"
+        <Button Grid.Column="1" Grid.Row="19"
                 HorizontalAlignment="Right"
-                Content="Delete"
+                Padding="5"
+                Margin="0 5 0 0"
+                Content="Delete Part"
+                IsEnabled="{Binding AssociatedPartSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding DeleteAssociatedPartCommand}"
                 CommandParameter="{Binding ElementName=dataGridAssociatedParts, Path=SelectedItem}"/>
     </Grid>

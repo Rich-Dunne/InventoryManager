@@ -87,7 +87,7 @@
                     Margin="0 5 0 5">
             <TextBox x:Name="partSearchBox"
                 Width="200" Height="20"
-                Text="{Binding PartSearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding SearchBoxContents, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button
                 Width="75" Height="20"
@@ -108,42 +108,58 @@
         
 
         <!-- Row 5 -->
-        <DataGrid x:Name="dataGridAllParts"
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Column="1" Grid.Row="5"
+                    Grid.RowSpan="5"
+                    x:Name="dgStackPanel">
+
+            <DataGrid x:Name="dataGridAllParts"
                 AutoGenerateColumns="False"
                 HorizontalAlignment="Left"
-                Grid.Column="1"
-                ColumnWidth="*"
-                Grid.Row="5"
-                Grid.RowSpan="5"
-                MinColumnWidth="76"
+                MaxHeight="120"
+                Width="330"
                 IsReadOnly="True"
                 CanUserResizeRows="False"
                 HeadersVisibility="Column"
                 ItemsSource="{Binding Parts}"
                 SelectionMode="Single"
-                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
+                SelectedItem="{Binding SelectedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FF008BFF"/>
+                                <Setter Property="BorderBrush" Value="#FF0074FF"/>
+                                <Setter Property="Foreground" Value="AliceBlue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
                     Header="Part ID"
                     Width="50"
                     Binding="{Binding PartID}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Part Name"
                     Width="100"
                     Binding="{Binding Name}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Price"
                     Width="75"
                     Binding="{Binding Price}"/>
 
-                <DataGridTextColumn
+                    <DataGridTextColumn
                     Header="Inventory"
-                    Width="60"
+                    Width="*"
                     Binding="{Binding Inventory}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
 
         <!-- Row 5 -->
         <StackPanel Orientation="Horizontal"
@@ -224,6 +240,7 @@
                 Padding="5"
                 Margin="5 0 0 0"
                 Content="Save"
+                IsEnabled="{Binding EnableSave}"
                 Command="{Binding SaveNewProductCommand}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
@@ -233,6 +250,7 @@
                 Padding="5"
                 Margin="272 0 0 0"
                 Content="Add Part"
+                IsEnabled="{Binding PartSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding Path=AddAssociatedPartCommand}"/>
         </StackPanel>
 
@@ -248,6 +266,7 @@
                   Grid.Column="1"
                   ColumnWidth="Auto"
                   MinColumnWidth="82"
+                  MaxHeight="120"
                   HorizontalAlignment="Left"
                   Grid.Row="13"
                   Grid.RowSpan="6"
@@ -256,7 +275,20 @@
                   HeadersVisibility="Column"
                   ItemsSource="{Binding AssociatedParts}"
                   SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding SelectedAssociatedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FF008BFF"/>
+                            <Setter Property="BorderBrush" Value="#FF0074FF"/>
+                            <Setter Property="Foreground" Value="AliceBlue"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="Part ID"
@@ -286,6 +318,7 @@
                 Padding="5"
                 Margin="0 5 0 0"
                 Content="Delete Part"
+                IsEnabled="{Binding AssociatedPartSelected, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding DeleteAssociatedPartCommand}"
                 CommandParameter="{Binding ElementName=dataGridAssociatedParts, Path=SelectedItem}"/>
     </Grid>
