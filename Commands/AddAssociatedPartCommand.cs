@@ -1,5 +1,4 @@
 ﻿using InventoryManager.ViewModels;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -20,19 +19,43 @@ namespace InventoryManager.Commands
             _modifyProductViewModel = viewModel;
         }
 
-        public override void Execute(object part)
+        public override void Execute(object param)
         {
-            if (_addProductViewModel?.SelectedItem != null && !_addProductViewModel.AssociatedParts.Contains((Part)_addProductViewModel.SelectedItem))
+            Part selectedPart;
+            if(_addProductViewModel != null)
             {
-                _addProductViewModel.AssociatedParts.Add((Part)_addProductViewModel.SelectedItem);
-                return;
+                selectedPart = _addProductViewModel.SelectedPart;
+                if (selectedPart == null)
+                {
+                    return;
+                }
+
+                if (_addProductViewModel.AssociatedParts.Any(x => x.PartID == selectedPart.PartID))
+                {
+                    return;
+                }
+
+                _addProductViewModel.AssociatedParts.Add(selectedPart);
+                Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
             }
 
-            Part selectedPart = (Part)_modifyProductViewModel.SelectedItem;
-            if (_modifyProductViewModel?.SelectedItem != null && !_modifyProductViewModel.TempAssociatedParts.Any(x => x.PartID == selectedPart.PartID))
+            if (_modifyProductViewModel != null)
             {
-                _modifyProductViewModel.TempAssociatedParts.Add((Part)_modifyProductViewModel.SelectedItem);
-                return;
+                selectedPart = _modifyProductViewModel.SelectedPart;
+                if(selectedPart == null)
+                {
+                    return;
+                }
+
+                if(_modifyProductViewModel.AssociatedParts.Any(x => x.PartID == selectedPart.PartID))
+                {
+                    return;
+                }
+
+                _modifyProductViewModel.AssociatedParts.Add(selectedPart);
+                _modifyProductViewModel.TempAssociatedParts.Add(selectedPart);
+
+                Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
             }
         }
     }
