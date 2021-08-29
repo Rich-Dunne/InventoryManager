@@ -1,91 +1,21 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
 namespace InventoryManager.Models
 {
-    public class Product : INotifyPropertyChanged
+    public class Product
     {
-        private int _productID;
-        public int ProductID 
-        { 
-            get => _productID;
-            set
-            {
-                _productID = value;
-                OnPropertyChanged(nameof(ProductID));
-            }
-        }
-        private string _name;
-        public string Name 
-        { 
-            get => _name; 
-            set
-            {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
-            }
-        }
-
-        private double _price;
-        public double Price 
-        { 
-            get => _price; 
-            set
-            {
-                _price = value;
-                OnPropertyChanged(nameof(Price));
-            }
-        }
-
-        private int _inventory;
-        public int Inventory
-        {
-            get => _inventory;
-            set
-            {
-                _inventory = value;
-                OnPropertyChanged(nameof(Inventory));
-            }
-        }
-
-        private int _min;
-        public int Min 
-        { 
-            get => _min; 
-            set
-            {
-                _min = value;
-                OnPropertyChanged(nameof(Min));
-            }
-        }
-
-        private int _max;
-        public int Max 
-        {
-            get => _max;
-            set
-            {
-                _max = value;
-                OnPropertyChanged(nameof(Max));
-            }
-        }
-
-        private ObservableCollection<Part> _associatedParts;
-        public ObservableCollection<Part> AssociatedParts 
-        { 
-            get => _associatedParts;
-            set
-            {
-                _associatedParts = value;
-                OnPropertyChanged(nameof(AssociatedParts));
-            }
-        }
+        public int ProductID { get; set; } = AssignUniqueID();
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Inventory { get; set; }
+        public int Min { get; set; }
+        public int Max { get; set; }
+        public ObservableCollection<Part> AssociatedParts { get; set; }
 
         internal Product(string name, double price, int inventory, int min, int max, ObservableCollection<Part> associatedParts)
         {
-            _productID = AssignUniqueID();
             Name = name;
             Price = price;
             Inventory = inventory;
@@ -94,25 +24,15 @@ namespace InventoryManager.Models
             AssociatedParts = associatedParts;
         }
 
-        internal Product(int productID, string name, double price, int inventory, int min, int max, ObservableCollection<Part> associatedParts)
+        internal Product(int productID, string name, double price, int inventory, int min, int max)
         {
-            _productID = productID;
+            ProductID = productID;
             Name = name;
             Price = price;
             Inventory = inventory;
             Min = min;
             Max = max;
-            AssociatedParts = associatedParts;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if(PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            AssociatedParts = new ObservableCollection<Part>();
         }
 
         private static int AssignUniqueID()
@@ -132,17 +52,29 @@ namespace InventoryManager.Models
 
         internal void AddAssociatedPart(Part part)
         {
+            if(part == null)
+            {
+                return;
+            }
 
+            if (!AssociatedParts.Any(x => x.PartID == part.PartID))
+            {
+                AssociatedParts.Add(part);
+            }
         }
 
         internal bool RemoveAssociatedPart(int partID)
         {
-            return false;
+            var partToRemove = AssociatedParts.FirstOrDefault(x => x.PartID == partID);
+            if(partToRemove == null)
+            {
+                return false;
+            }
+
+            AssociatedParts.Remove(partToRemove);
+            return true;
         }
 
-        internal Part LookupAssociatedPart(int partID)
-        {
-            return null;
-        }
+        internal Part LookupAssociatedPart(int partID) => AssociatedParts.FirstOrDefault(x => x.PartID == partID);
     }
 }
