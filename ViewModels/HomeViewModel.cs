@@ -36,7 +36,7 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        public ObservableCollection<Product> Products 
+        public BindingList<Product> Products 
         { 
             get => Inventory.Products; 
             set
@@ -46,7 +46,7 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        public ObservableCollection<Part> Parts 
+        public BindingList<Part> Parts 
         {
             get => Inventory.Parts; 
             set

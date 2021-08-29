@@ -22,8 +22,8 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region DataGridSources
-        public ObservableCollection<Part> Parts { get; set; } = Inventory.Parts;
-        public ObservableCollection<Part> AssociatedParts { get; } = new ObservableCollection<Part>();
+        public BindingList<Part> Parts { get; set; } = Inventory.Parts;
+        public BindingList<Part> AssociatedParts { get; } = new BindingList<Part>();
         #endregion
 
         #region FormProperties

@@ -20,7 +20,7 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region Properties
-        public ObservableCollection<Part> Parts { get; set; } = Inventory.Parts;
+        public BindingList<Part> Parts { get; set; } = Inventory.Parts;
         #endregion
 
         #region FormProperties

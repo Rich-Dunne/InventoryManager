@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -12,9 +13,9 @@ namespace InventoryManager.Models
         public int Inventory { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
-        public ObservableCollection<Part> AssociatedParts { get; set; }
+        public BindingList<Part> AssociatedParts { get; set; }
 
-        internal Product(string name, double price, int inventory, int min, int max, ObservableCollection<Part> associatedParts)
+        internal Product(string name, double price, int inventory, int min, int max, BindingList<Part> associatedParts)
         {
             Name = name;
             Price = price;
@@ -32,7 +33,7 @@ namespace InventoryManager.Models
             Inventory = inventory;
             Min = min;
             Max = max;
-            AssociatedParts = new ObservableCollection<Part>();
+            AssociatedParts = new BindingList<Part>();
         }
 
         private static int AssignUniqueID()
