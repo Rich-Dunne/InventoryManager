@@ -1,7 +1,6 @@
 ﻿using InventoryManager.Models;
 using InventoryManager.ViewModels;
 using System.Diagnostics;
-using System.Windows;
 
 namespace InventoryManager.Commands
 {
@@ -23,30 +22,14 @@ namespace InventoryManager.Commands
 
             if(_viewModel.IsInHousePart)
             {
-                Inventory.UpdatePart(_viewModel.PartID, new InHousePart(_viewModel.PartID, _viewModel.PartName, _viewModel.PartPrice, _viewModel.PartInventory, _viewModel.PartMin, _viewModel.PartMax, _viewModel.MachineID));
+                Inventory.UpdatePart(_viewModel.PartID, new InHousePart(_viewModel.PartID, _viewModel.PartName, double.Parse(_viewModel.PartPrice), int.Parse(_viewModel.PartInventory), int.Parse(_viewModel.PartMin), int.Parse(_viewModel.PartMax), int.Parse(_viewModel.MachineID)));
             }
             else
             {
-                Inventory.UpdatePart(_viewModel.PartID, new OutsourcedPart(_viewModel.PartID, _viewModel.PartName, _viewModel.PartPrice, _viewModel.PartInventory, _viewModel.PartMin, _viewModel.PartMax, _viewModel.CompanyName));
+                Inventory.UpdatePart(_viewModel.PartID, new OutsourcedPart(_viewModel.PartID, _viewModel.PartName, double.Parse(_viewModel.PartPrice), int.Parse(_viewModel.PartInventory), int.Parse(_viewModel.PartMin), int.Parse(_viewModel.PartMax), _viewModel.CompanyName));
             }
             
             _viewModel.NavigateHomeCommand.Execute(null);
         }
-
-        //private bool IsInputValid()
-        //{
-        //    if (string.IsNullOrWhiteSpace(_viewModel.PartName))
-        //    {
-        //        MessageBox.Show($"A product name is required.");
-        //        return false;
-        //    }
-        //    if (_viewModel.HasErrors)
-        //    {
-        //        MessageBox.Show($"Please fix the errors before attempting to add a new product.");
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
     }
 }

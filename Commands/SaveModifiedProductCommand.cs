@@ -21,7 +21,7 @@ namespace InventoryManager.Commands
                 return;
             }
 
-            var modifiedProduct = new Product(_viewModel.ProductID, _viewModel.ProductName, _viewModel.ProductPrice, _viewModel.ProductInventory, _viewModel.ProductMin, _viewModel.ProductMax);
+            var modifiedProduct = new Product(_viewModel.ProductID, _viewModel.ProductName, double.Parse(_viewModel.ProductPrice), int.Parse(_viewModel.ProductInventory), int.Parse(_viewModel.ProductMin), int.Parse(_viewModel.ProductMax));
             foreach (Part part in _viewModel.AssociatedParts)
             {
                 modifiedProduct.AddAssociatedPart(part);

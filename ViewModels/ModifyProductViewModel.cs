@@ -27,24 +27,14 @@ namespace InventoryManager.ViewModels
 
         #region DataGridSources
         public BindingList<Part> Parts { get; set; } = Inventory.Parts;
-
-        //private ObservableCollection<Part> _associatedParts;
         public BindingList<Part> AssociatedParts { get; set; } = new BindingList<Part>();
-        //{ 
-        //    get => _associatedParts; 
-        //    set
-        //    {
-        //        _associatedParts = value;
-        //        OnPropertyChanged(nameof(AssociatedParts));
-        //    }
-        //}
         #endregion
 
         #region FormProperties
         public int ProductID { get; set; } = -1;
         private string _productName;
-        public string ProductName 
-        { 
+        public string ProductName
+        {
             get => _productName;
             set
             {
@@ -58,57 +48,81 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private int _productInventory;
-        public int ProductInventory
+        private int? _productInventory;
+        public string ProductInventory
         {
-            get => _productInventory;
+            get => _productInventory.ToString();
 
             set
             {
-                _productInventory = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _productInventory = number;
+                }
+                else
+                {
+                    _productInventory = null;
+                }
                 ValidateInput();
                 OnPropertyChanged(nameof(ProductInventory));
             }
         }
 
-        private double _productPrice;
-        public double ProductPrice
+        private double? _productPrice;
+        public string ProductPrice
         {
-            get => _productPrice;
+            get => _productPrice.ToString();
 
             set
             {
-                _productPrice = value;
-                _errorsViewModel.ClearErrors(nameof(ProductPrice));
-                if (_productPrice < 0)
+                if (double.TryParse(value, out var number))
                 {
-                    _errorsViewModel.AddError(nameof(ProductPrice), "Value must be at least 0");
+                    _productPrice = number;
                 }
+                else
+                {
+                    _productPrice = null;
+                }
+                ValidateInput();
                 OnPropertyChanged(nameof(ProductPrice));
             }
         }
 
-        private int _productMin;
-        public int ProductMin 
+        private int? _productMin;
+        public string ProductMin
         {
-            get => _productMin;
+            get => _productMin.ToString();
 
             set
             {
-                _productMin = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _productMin = number;
+                }
+                else
+                {
+                    _productMin = null;
+                }
                 ValidateInput();
                 OnPropertyChanged(nameof(ProductMin));
             }
         }
 
-        private int _productMax;
-        public int ProductMax
+        private int? _productMax;
+        public string ProductMax
         {
-            get => _productMax;
+            get => _productMax.ToString();
 
             set
             {
-                _productMax = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _productMax = number;
+                }
+                else
+                {
+                    _productMax = null;
+                }
                 ValidateInput();
                 OnPropertyChanged(nameof(ProductMax));
             }
@@ -128,9 +142,15 @@ namespace InventoryManager.ViewModels
                 {
                     PartSelected = false;
                 }
+                else if (_selectedPart != null && AssociatedParts.Any(x => x.PartID == _selectedPart.PartID))
+                {
+                    PartSelected = false;
+                    SelectedAssociatedPart = null;
+                }
                 else
                 {
                     PartSelected = true;
+                    SelectedAssociatedPart = null;
                 }
             }
         }
@@ -162,6 +182,7 @@ namespace InventoryManager.ViewModels
                 else
                 {
                     AssociatedPartSelected = true;
+                    SelectedPart = null;
                 }
             }
         }
@@ -231,6 +252,7 @@ namespace InventoryManager.ViewModels
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
             AssignFormProperties();
+            ValidateInput();
             EnableSave = !HasErrors;
             Debug.WriteLine($"Has errors: {HasErrors}");
 
@@ -252,10 +274,10 @@ namespace InventoryManager.ViewModels
         {
             ProductID = ProductBeingModified.ProductID;
             ProductName = ProductBeingModified.Name;
-            ProductInventory = ProductBeingModified.Inventory;
-            ProductPrice = ProductBeingModified.Price;
-            ProductMin = ProductBeingModified.Min;
-            ProductMax = ProductBeingModified.Max;
+            ProductInventory = ProductBeingModified.Inventory.ToString();
+            ProductPrice = ProductBeingModified.Price.ToString();
+            ProductMin = ProductBeingModified.Min.ToString();
+            ProductMax = ProductBeingModified.Max.ToString();
 
             foreach (Part part in ProductBeingModified.AssociatedParts.ToList())
             {
@@ -268,10 +290,36 @@ namespace InventoryManager.ViewModels
         public void ValidateInput()
         {
             // When Min, Max, or Inventory are set, I need to clear all their errors and reassess
+            _errorsViewModel.ClearErrors(nameof(ProductName));
+            _errorsViewModel.ClearErrors(nameof(ProductPrice));
             _errorsViewModel.ClearErrors(nameof(ProductInventory));
             _errorsViewModel.ClearErrors(nameof(ProductMin));
             _errorsViewModel.ClearErrors(nameof(ProductMax));
-            if (_productInventory > ProductMax || _productInventory < ProductMin)
+
+            // Validate nulls
+            if (string.IsNullOrWhiteSpace(_productName))
+            {
+                _errorsViewModel.AddError(nameof(ProductName), "A product name is required");
+            }
+            if (_productInventory < 0 || _productInventory == null)
+            {
+                _errorsViewModel.AddError(nameof(ProductInventory), "Value must be at least 0");
+            }
+            if (_productPrice < 0 || _productPrice == null)
+            {
+                _errorsViewModel.AddError(nameof(ProductPrice), "Value must be at least 0");
+            }
+            if (_productMin < 0 || _productMin == null)
+            {
+                _errorsViewModel.AddError(nameof(ProductMin), "Value must be at least 0");
+            }
+            if (_productMax < 0 || _productMax == null)
+            {
+                _errorsViewModel.AddError(nameof(ProductMax), "Value must be at least 0");
+            }
+
+            // Validate value ranges
+            if (_productInventory > _productMax || _productInventory < _productMin)
             {
                 _errorsViewModel.AddError(nameof(ProductInventory), "Inventory value must be greater than Min and less than Max");
             }
@@ -279,19 +327,19 @@ namespace InventoryManager.ViewModels
             {
                 _errorsViewModel.AddError(nameof(ProductInventory), "Inventory value must be at least 0");
             }
-            if (_productMax < ProductMin)
+            if (_productMax < _productMin)
             {
                 _errorsViewModel.AddError(nameof(ProductMax), "Max value must be more than Min");
             }
-            if (_productMax < ProductInventory)
+            if (_productMax < _productInventory)
             {
                 _errorsViewModel.AddError(nameof(ProductMax), "Max value must be more than Inventory");
             }
-            if (_productMin > ProductMax)
+            if (_productMin > _productMax)
             {
                 _errorsViewModel.AddError(nameof(ProductMin), "Min value must be less than Max");
             }
-            if (_productMin > ProductInventory)
+            if (_productMin > _productInventory)
             {
                 _errorsViewModel.AddError(nameof(ProductMin), "Min value must be less than Inventory");
             }

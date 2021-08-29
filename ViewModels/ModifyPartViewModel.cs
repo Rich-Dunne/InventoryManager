@@ -51,53 +51,84 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private int _partInventory;
-        public int PartInventory
+        private int? _partInventory;
+        public string PartInventory
         {
-            get => _partInventory;
+            get => _partInventory?.ToString();
 
             set
             {
-                _partInventory = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _partInventory = number;
+                }
+                else
+                {
+                    _partInventory = null;
+                }
+
                 ValidateInput();
                 OnPropertyChanged(nameof(PartInventory));
             }
         }
 
-        private double _partPrice;
-        public double PartPrice
+        private double? _partPrice;
+        public string PartPrice
         {
-            get => _partPrice;
+            get => _partPrice?.ToString();
 
             set
             {
-                _partPrice = value;
+                if (double.TryParse(value, out var number))
+                {
+                    _partPrice = number;
+                }
+                else
+                {
+                    _partPrice = null;
+                }
                 ValidateInput();
                 OnPropertyChanged(nameof(PartPrice));
             }
         }
 
-        private int _partMin;
-        public int PartMin
+        private int? _partMin;
+        public string PartMin
         {
-            get => _partMin;
+            get => _partMin.ToString();
 
             set
             {
-                _partMin = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _partMin = number;
+                }
+                else
+                {
+                    _partMin = null;
+                }
+
                 ValidateInput();
                 OnPropertyChanged(nameof(PartMin));
             }
         }
 
-        private int _partMax;
-        public int PartMax
+        private int? _partMax;
+        public string PartMax
         {
-            get => _partMax;
+            get => _partMax.ToString();
 
             set
             {
-                _partMax = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _partMax = number;
+                }
+                else
+                {
+                    _partMax = null;
+                }
+
                 ValidateInput();
                 OnPropertyChanged(nameof(PartMax));
             }
@@ -115,13 +146,21 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private int _machineID;
-        public int MachineID
+        private int? _machineID;
+        public string MachineID
         {
-            get => _machineID;
+            get => _machineID.ToString();
             set
             {
-                _machineID = value;
+                if (int.TryParse(value, out var number))
+                {
+                    _machineID = number;
+                }
+                else
+                {
+                    _machineID = null;
+                }
+
                 ValidateInput();
                 OnPropertyChanged(nameof(MachineID));
             }
@@ -198,17 +237,17 @@ namespace InventoryManager.ViewModels
             Debug.WriteLine($"Part being modified: {PartBeingModified.Name} (Type: {PartBeingModified.GetType().Name})");
             PartID = PartBeingModified.PartID;
             PartName = PartBeingModified.Name;
-            PartInventory = PartBeingModified.Inventory;
-            PartPrice = PartBeingModified.Price;
-            PartMin = PartBeingModified.Min;
-            PartMax = PartBeingModified.Max;
+            PartInventory = PartBeingModified.Inventory.ToString();
+            PartPrice = PartBeingModified.Price.ToString();
+            PartMin = PartBeingModified.Min.ToString();
+            PartMax = PartBeingModified.Max.ToString();
             if(PartBeingModified.GetType() == typeof(InHousePart))
             {
                 IsInHousePart = true;
                 IsOutsourcedPart = false;
                 var inHousePart = PartBeingModified as InHousePart;
-                MachineID = inHousePart.MachineID;
-                CompanyName = "";
+                MachineID = inHousePart.MachineID.ToString();
+
             }
             else
             {
@@ -216,59 +255,71 @@ namespace InventoryManager.ViewModels
                 IsInHousePart = false;
                 var outsourcedPart = PartBeingModified as OutsourcedPart;
                 CompanyName = outsourcedPart.CompanyName;
-                MachineID = -1;
+
             }
         }
 
         public void ValidateInput()
         {
             // When Min, Max, or Inventory are set, I need to clear all their errors and reassess
+            _errorsViewModel.ClearErrors(nameof(PartName));
             _errorsViewModel.ClearErrors(nameof(PartInventory));
+            _errorsViewModel.ClearErrors(nameof(PartPrice));
             _errorsViewModel.ClearErrors(nameof(PartMin));
             _errorsViewModel.ClearErrors(nameof(PartMax));
             _errorsViewModel.ClearErrors(nameof(CompanyName));
             _errorsViewModel.ClearErrors(nameof(MachineID));
-            _errorsViewModel.ClearErrors(nameof(PartPrice));
-            _errorsViewModel.ClearErrors(nameof(PartName));
+
+            // Validate nulls
             if (string.IsNullOrWhiteSpace(_partName))
             {
                 _errorsViewModel.AddError(nameof(PartName), "A product name is required");
             }
-            if (_partPrice < 0)
+            if (_partInventory < 0 || _partInventory == null)
+            {
+                _errorsViewModel.AddError(nameof(PartInventory), "Value must be at least 0");
+            }
+            if (_partPrice < 0 || _partPrice == null)
             {
                 _errorsViewModel.AddError(nameof(PartPrice), "Value must be at least 0");
             }
-            if (_partInventory > PartMax || _partInventory < PartMin)
+            if (_partMin < 0 || _partMin == null)
             {
-                _errorsViewModel.AddError(nameof(PartInventory), "Inventory value must be greater than Min and less than Max");
+                _errorsViewModel.AddError(nameof(PartMin), "Value must be at least 0");
             }
-            if (_partInventory < 0)
+            if (_partMax < 0 || _partMax == null)
             {
-                _errorsViewModel.AddError(nameof(PartInventory), "Inventory value must be at least 0");
+                _errorsViewModel.AddError(nameof(PartMax), "Value must be at least 0");
             }
-            if (_partMax < PartMin)
-            {
-                _errorsViewModel.AddError(nameof(PartMax), "Max value must be more than Min");
-            }
-            if (_partMax < PartInventory)
-            {
-                _errorsViewModel.AddError(nameof(PartMax), "Max value must be more than Inventory");
-            }
-            if (_partMin > PartMax)
-            {
-                _errorsViewModel.AddError(nameof(PartMin), "Min value must be less than Max");
-            }
-            if (_partMin > PartInventory)
-            {
-                _errorsViewModel.AddError(nameof(PartMin), "Min value must be less than Inventory");
-            }
-            if (IsInHousePart && _machineID < 0)
+            if (IsInHousePart && (_machineID < 0 || _machineID == null))
             {
                 _errorsViewModel.AddError(nameof(MachineID), "Value must be at least 0");
             }
             if (IsOutsourcedPart && string.IsNullOrWhiteSpace(_companyName))
             {
                 _errorsViewModel.AddError(nameof(CompanyName), "A company name is required");
+            }
+
+            // Validate value ranges
+            if (_partInventory > _partMax || _partInventory < _partMin)
+            {
+                _errorsViewModel.AddError(nameof(PartInventory), "Inventory value must be greater than Min and less than Max");
+            }
+            if (_partMax < _partMin)
+            {
+                _errorsViewModel.AddError(nameof(PartMax), "Max value must be more than Min");
+            }
+            if (_partMax < _partInventory)
+            {
+                _errorsViewModel.AddError(nameof(PartMax), "Max value must be more than Inventory");
+            }
+            if (_partMin > _partMax)
+            {
+                _errorsViewModel.AddError(nameof(PartMin), "Min value must be less than Max");
+            }
+            if (_partMin > _partInventory)
+            {
+                _errorsViewModel.AddError(nameof(PartMin), "Min value must be less than Inventory");
             }
         }
     }

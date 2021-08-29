@@ -22,11 +22,11 @@ namespace InventoryManager.Commands
 
             if(_viewModel.IsInHousePart)
             {
-                Inventory.AddPart(new InHousePart(_viewModel.PartID, _viewModel.PartName, _viewModel.PartPrice, _viewModel.PartInventory, _viewModel.PartMin, _viewModel.PartMax, _viewModel.MachineID));
+                Inventory.AddPart(new InHousePart(_viewModel.PartID, _viewModel.PartName, double.Parse(_viewModel.PartPrice), int.Parse(_viewModel.PartInventory), int.Parse(_viewModel.PartMin), int.Parse(_viewModel.PartMax), int.Parse(_viewModel.MachineID)));
             }
             else
             {
-                Inventory.AddPart(new OutsourcedPart(_viewModel.PartID, _viewModel.PartName, _viewModel.PartPrice, _viewModel.PartInventory, _viewModel.PartMin, _viewModel.PartMax, _viewModel.CompanyName));
+                Inventory.AddPart(new OutsourcedPart(_viewModel.PartID, _viewModel.PartName, double.Parse(_viewModel.PartPrice), int.Parse(_viewModel.PartInventory), int.Parse(_viewModel.PartMin), int.Parse(_viewModel.PartMax), _viewModel.CompanyName));
             }
             _viewModel.NavigateHomeCommand.Execute(null);
         }
