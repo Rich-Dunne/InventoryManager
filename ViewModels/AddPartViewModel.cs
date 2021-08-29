@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
@@ -31,11 +32,7 @@ namespace InventoryManager.ViewModels
             set
             {
                 _partName = value;
-                _errorsViewModel.ClearErrors(nameof(PartName));
-                if (string.IsNullOrWhiteSpace(_partName))
-                {
-                    _errorsViewModel.AddError(nameof(PartName), "A product name is required");
-                }
+                ValidateInput();
                 OnPropertyChanged(nameof(PartName));
             }
         }
@@ -61,11 +58,7 @@ namespace InventoryManager.ViewModels
             set
             {
                 _partPrice = value;
-                _errorsViewModel.ClearErrors(nameof(PartPrice));
-                if (_partPrice < 0)
-                {
-                    _errorsViewModel.AddError(nameof(PartPrice), "Value must be at least 0");
-                }
+                ValidateInput();
                 OnPropertyChanged(nameof(PartPrice));
             }
         }
@@ -103,6 +96,7 @@ namespace InventoryManager.ViewModels
             set
             {
                 _companyName = value;
+                ValidateInput();
                 OnPropertyChanged(nameof(CompanyName));
             }
         }
@@ -114,6 +108,7 @@ namespace InventoryManager.ViewModels
             set
             {
                 _machineID = value;
+                ValidateInput();
                 OnPropertyChanged(nameof(MachineID));
             }
         }
@@ -125,13 +120,39 @@ namespace InventoryManager.ViewModels
             set
             {
                 _isInHousePart = value;
+                ValidateInput();
                 OnPropertyChanged(nameof(IsInHousePart));
             }
         }
 
+        private bool _isOutsourcedPart = false;
+        public bool IsOutsourcedPart
+        {
+            get => _isOutsourcedPart;
+            set
+            {
+                _isOutsourcedPart = value;
+                ValidateInput();
+                OnPropertyChanged(nameof(IsOutsourcedPart));
+            }
+        }
+
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
         public bool HasErrors => _errorsViewModel.HasErrors;
         #endregion
+
+        private bool _enableSave = false;
+        public bool EnableSave
+        {
+            get => _enableSave;
+            set
+            {
+                _enableSave = value;
+                OnPropertyChanged(nameof(EnableSave));
+            }
+        }
+
 
         public AddPartViewModel(NavigationStore navigationStore)
         {
@@ -139,6 +160,7 @@ namespace InventoryManager.ViewModels
             SaveNewPartCommand = new SaveNewPartCommand(this);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
+            _errorsViewModel.AddError(nameof(PartName), "A part name is required.");
             PartID = GetNewPartID();
         }
 
@@ -160,7 +182,11 @@ namespace InventoryManager.ViewModels
 
         public IEnumerable GetErrors(string propertyName) => _errorsViewModel.GetErrors(propertyName);
 
-        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e) => ErrorsChanged?.Invoke(this, e);
+        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            EnableSave = !HasErrors;
+            ErrorsChanged?.Invoke(this, e);
+        }
 
         public void ValidateInput()
         {
@@ -168,6 +194,18 @@ namespace InventoryManager.ViewModels
             _errorsViewModel.ClearErrors(nameof(PartInventory));
             _errorsViewModel.ClearErrors(nameof(PartMin));
             _errorsViewModel.ClearErrors(nameof(PartMax));
+            _errorsViewModel.ClearErrors(nameof(CompanyName));
+            _errorsViewModel.ClearErrors(nameof(MachineID));
+            _errorsViewModel.ClearErrors(nameof(PartPrice));
+            _errorsViewModel.ClearErrors(nameof(PartName));
+            if (string.IsNullOrWhiteSpace(_partName))
+            {
+                _errorsViewModel.AddError(nameof(PartName), "A product name is required");
+            }
+            if (_partPrice < 0)
+            {
+                _errorsViewModel.AddError(nameof(PartPrice), "Value must be at least 0");
+            }
             if (_partInventory > PartMax || _partInventory < PartMin)
             {
                 _errorsViewModel.AddError(nameof(PartInventory), "Inventory value must be greater than Min and less than Max");
@@ -191,6 +229,14 @@ namespace InventoryManager.ViewModels
             if (_partMin > PartInventory)
             {
                 _errorsViewModel.AddError(nameof(PartMin), "Min value must be less than Inventory");
+            }
+            if (IsInHousePart && _machineID < 0)
+            {
+                _errorsViewModel.AddError(nameof(MachineID), "Value must be at least 0");
+            }
+            if (IsOutsourcedPart && string.IsNullOrWhiteSpace(_companyName))
+            {
+                _errorsViewModel.AddError(nameof(CompanyName), "A company name is required");
             }
         }
     }
