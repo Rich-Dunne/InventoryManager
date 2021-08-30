@@ -1,5 +1,6 @@
 ﻿using InventoryManager.Models;
 using InventoryManager.ViewModels;
+using System.Diagnostics;
 using System.Windows;
 
 namespace InventoryManager.Commands

@@ -1,4 +1,4 @@
-﻿using InventoryManager.Stores;
+﻿using InventoryManager.Services;
 using InventoryManager.ViewModels;
 using System;
 
@@ -7,18 +7,16 @@ namespace InventoryManager.Commands
     public class NavigateCommand<TViewModel> : CommandBase
         where TViewModel : BaseViewModel
     {
-        private readonly NavigationStore _navigationStore;
-        private readonly Func<TViewModel> _createViewModel;
+        private readonly NavigationService<TViewModel> _navigationService;
 
-        public NavigateCommand(NavigationStore navigationStore, Func<TViewModel> createViewModel)
+        public NavigateCommand(NavigationService<TViewModel> navigationService)
         {
-            _navigationStore = navigationStore;
-            _createViewModel = createViewModel;
+            _navigationService = navigationService;
         }
 
         public override void Execute(object parameter)
         {
-            _navigationStore.CurrentViewModel = _createViewModel();
+            _navigationService.Navigate();
         }
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\AddAssociatedPartCommand.cs" />
     <Compile Include="Commands\DeleteAssociatedPartCommand.cs" />
+    <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Validators\NameValidator.cs" />
     <Compile Include="ViewModels\ModifyPartViewModel.cs" />

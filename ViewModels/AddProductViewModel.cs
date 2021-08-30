@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
+using InventoryManager.Services;
 using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
@@ -212,7 +212,7 @@ namespace InventoryManager.ViewModels
 
         public AddProductViewModel(NavigationStore navigationStore)
         {
-            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore)));
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             SaveNewProductCommand = new SaveNewProductCommand(this);

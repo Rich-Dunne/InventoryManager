@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using InventoryManager.Commands;
 using InventoryManager.Models;
+using InventoryManager.Services;
 using InventoryManager.Stores;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -125,13 +126,13 @@ namespace InventoryManager.ViewModels
         public HomeViewModel(NavigationStore navigationStore)
         {
             SearchProductCommand = new SearchProductCommand(this);
-            NavigateAddProductCommand = new NavigateCommand<AddProductViewModel>(navigationStore, () => new AddProductViewModel(navigationStore));
-            NavigateModifyProductCommand = new NavigateCommand<ModifyProductViewModel>(navigationStore, () => new ModifyProductViewModel(navigationStore, SelectedProduct));
+            NavigateAddProductCommand = new NavigateCommand<AddProductViewModel>(new NavigationService<AddProductViewModel>(navigationStore, () => new AddProductViewModel(navigationStore)));
+            NavigateModifyProductCommand = new NavigateCommand<ModifyProductViewModel>(new NavigationService<ModifyProductViewModel>(navigationStore, () => new ModifyProductViewModel(navigationStore, SelectedProduct)));
             DeleteProductCommand = new DeleteProductCommand(this);
 
             SearchPartCommand = new SearchPartCommand(this);
-            NavigateAddPartCommand = new NavigateCommand<AddProductViewModel>(navigationStore, () => new AddProductViewModel(navigationStore));
-            NavigateModifyPartCommand = new NavigateCommand<ModifyPartViewModel>(navigationStore, () => new ModifyPartViewModel(navigationStore, SelectedPart));
+            NavigateAddPartCommand = new NavigateCommand<AddPartViewModel>(new NavigationService<AddPartViewModel>(navigationStore, () => new AddPartViewModel(navigationStore)));
+            NavigateModifyPartCommand = new NavigateCommand<ModifyPartViewModel>(new NavigationService<ModifyPartViewModel>(navigationStore, () => new ModifyPartViewModel(navigationStore, SelectedPart)));
             DeletePartCommand = new DeletePartCommand(this);
             CloseWindowCommand = new RelayCommand<Window>(CloseWindow);
         }

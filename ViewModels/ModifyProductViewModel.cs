@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -254,7 +253,7 @@ namespace InventoryManager.ViewModels
             EnableSave = !HasErrors;
             Debug.WriteLine($"Has errors: {HasErrors}");
 
-            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new Services.NavigationService<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore)));
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             SaveModifiedProductCommand = new SaveModifiedProductCommand(this);
