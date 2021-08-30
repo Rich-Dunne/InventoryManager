@@ -212,7 +212,7 @@ namespace InventoryManager.ViewModels
 
         public AddProductViewModel(NavigationStore navigationStore)
         {
-            NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             SaveNewProductCommand = new SaveNewProductCommand(this);

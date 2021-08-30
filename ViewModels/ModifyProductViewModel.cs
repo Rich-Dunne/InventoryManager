@@ -14,7 +14,6 @@ namespace InventoryManager.ViewModels
 {
     public class ModifyProductViewModel : BaseViewModel, INotifyDataErrorInfo
     {
-        private HomeViewModel _homeViewModel;
         private ErrorsViewModel _errorsViewModel;
         #region Commands
         public ICommand NavigateHomeCommand { get; }
@@ -245,10 +244,9 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        public ModifyProductViewModel(NavigationStore navigationStore, HomeViewModel viewModel)
+        public ModifyProductViewModel(NavigationStore navigationStore, Product productBeingModified)
         {
-            _homeViewModel = viewModel;
-            ProductBeingModified = Inventory.LookupProduct(_homeViewModel.SelectedProduct.ProductID);
+            ProductBeingModified = Inventory.LookupProduct(productBeingModified.ProductID);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
             AssignFormProperties();
@@ -256,7 +254,7 @@ namespace InventoryManager.ViewModels
             EnableSave = !HasErrors;
             Debug.WriteLine($"Has errors: {HasErrors}");
 
-            NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             SaveModifiedProductCommand = new SaveModifiedProductCommand(this);

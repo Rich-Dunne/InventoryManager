@@ -72,8 +72,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DeletePartCommand.cs" />
     <Compile Include="Commands\DeleteProductCommand.cs" />
-    <Compile Include="Commands\NavigateModifyPartCommand.cs" />
-    <Compile Include="Commands\NavigateModifyProductCommand.cs" />
+    <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="Commands\CancelModifiedProductCommand.cs" />
     <Compile Include="Commands\SaveModifiedProductCommand.cs" />
     <Compile Include="Commands\SaveModifiedPartCommand.cs" />
@@ -84,9 +83,6 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\AddAssociatedPartCommand.cs" />
     <Compile Include="Commands\DeleteAssociatedPartCommand.cs" />
-    <Compile Include="Commands\NavigateAddProductCommand.cs" />
-    <Compile Include="Commands\NavigateHomeCommand.cs" />
-    <Compile Include="Commands\NavigateAddPartCommand.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Validators\NameValidator.cs" />
     <Compile Include="ViewModels\ModifyPartViewModel.cs" />

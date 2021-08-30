@@ -195,7 +195,7 @@ namespace InventoryManager.ViewModels
 
         public AddPartViewModel(NavigationStore navigationStore)
         {
-            NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             SaveNewPartCommand = new SaveNewPartCommand(this);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;

@@ -13,7 +13,6 @@ namespace InventoryManager.ViewModels
 {
     public class ModifyPartViewModel : BaseViewModel, INotifyDataErrorInfo
     {
-        private HomeViewModel _homeViewModel;
         private ErrorsViewModel _errorsViewModel;
 
         #region Commands
@@ -205,14 +204,13 @@ namespace InventoryManager.ViewModels
         }
         #endregion
 
-        public ModifyPartViewModel(NavigationStore navigationStore, HomeViewModel viewModel)
+        public ModifyPartViewModel(NavigationStore navigationStore, Part partBeingModified)
         {
-            NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
-            _homeViewModel = viewModel;
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
 
-            PartBeingModified = Inventory.LookupPart(_homeViewModel.SelectedPart.PartID);
+            PartBeingModified = Inventory.LookupPart(partBeingModified.PartID);
             AssignFormProperties();
             EnableSave = !HasErrors;
             SaveModifiedPartCommand = new SaveModifiedPartCommand(this);

@@ -125,13 +125,13 @@ namespace InventoryManager.ViewModels
         public HomeViewModel(NavigationStore navigationStore)
         {
             SearchProductCommand = new SearchProductCommand(this);
-            NavigateAddProductCommand = new NavigateAddProductCommand(navigationStore);
-            NavigateModifyProductCommand = new NavigateModifyProductCommand(navigationStore, this);
+            NavigateAddProductCommand = new NavigateCommand<AddProductViewModel>(navigationStore, () => new AddProductViewModel(navigationStore));
+            NavigateModifyProductCommand = new NavigateCommand<ModifyProductViewModel>(navigationStore, () => new ModifyProductViewModel(navigationStore, SelectedProduct));
             DeleteProductCommand = new DeleteProductCommand(this);
 
             SearchPartCommand = new SearchPartCommand(this);
-            NavigateAddPartCommand = new NavigateAddPartCommand(navigationStore);
-            NavigateModifyPartCommand = new NavigateModifyPartCommand(navigationStore, this);
+            NavigateAddPartCommand = new NavigateCommand<AddProductViewModel>(navigationStore, () => new AddProductViewModel(navigationStore));
+            NavigateModifyPartCommand = new NavigateCommand<ModifyPartViewModel>(navigationStore, () => new ModifyPartViewModel(navigationStore, SelectedPart));
             DeletePartCommand = new DeletePartCommand(this);
             CloseWindowCommand = new RelayCommand<Window>(CloseWindow);
         }
