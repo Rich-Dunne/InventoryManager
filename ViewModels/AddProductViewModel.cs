@@ -5,19 +5,21 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
+using InventoryManager.Interfaces;
+using InventoryManager.Models;
 using InventoryManager.Services;
 using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
 {
-    public class AddProductViewModel : BaseViewModel, INotifyDataErrorInfo
+    public class AddProductViewModel : BaseViewModel, INotifyDataErrorInfo, ISearchableViewModel, IProductViewModel
     {
         private ErrorsViewModel _errorsViewModel;
         #region Commands
         public ICommand NavigateHomeCommand { get; }
         public ICommand AddAssociatedPartCommand { get; internal set; }
         public ICommand DeleteAssociatedPartCommand { get; internal set; }
-        public ICommand SaveNewProductCommand { get; internal set; }
+        public ICommand SaveProductCommand { get; internal set; }
         public ICommand SearchPartCommand { get; internal set; }
         #endregion
 
@@ -27,7 +29,7 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region FormProperties
-        public int ProductID { get; } = -1;
+        public int ProductID { get; set; } = -1;
         private string _productName;
         public string ProductName 
         { 
@@ -184,6 +186,7 @@ namespace InventoryManager.ViewModels
 
             }
         }
+        
         private bool _associatedPartSelected = false;
         public bool AssociatedPartSelected
         {
@@ -195,10 +198,11 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        public string SearchBoxContents { get; set; } = "";
+        public string PartSearchBoxContents { get; set; } = "";
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public bool HasErrors => _errorsViewModel.HasErrors;
+        
         private bool _enableSave = false;
         public bool EnableSave
         {
@@ -210,12 +214,20 @@ namespace InventoryManager.ViewModels
             }
         }
 
+        public Product SelectedProduct { get; set; }
+
+        public BindingList<Product> Products { get; }
+
+        public string ProductSearchBoxContents { get; }
+
+        public BindingList<Part> TempAssociatedParts { get; }
+
         public AddProductViewModel(NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore)));
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
-            SaveNewProductCommand = new SaveNewProductCommand(this);
+            SaveProductCommand = new SaveProductCommand(this);
             SearchPartCommand = new SearchPartCommand(this);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;

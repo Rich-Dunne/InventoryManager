@@ -1,4 +1,4 @@
-﻿using InventoryManager.ViewModels;
+﻿using InventoryManager.Interfaces;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -7,9 +7,9 @@ namespace InventoryManager.Commands
 {
     public class SearchProductCommand : CommandBase
     {
-        private HomeViewModel _viewModel;
+        private ISearchableViewModel _viewModel;
 
-        public SearchProductCommand(HomeViewModel viewModel)
+        public SearchProductCommand(ISearchableViewModel viewModel)
         {
             _viewModel = viewModel;
         }

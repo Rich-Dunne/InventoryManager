@@ -6,21 +6,21 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
+using InventoryManager.Interfaces;
 using InventoryManager.Models;
 using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
 {
-    public class ModifyProductViewModel : BaseViewModel, INotifyDataErrorInfo
+    public class ModifyProductViewModel : BaseViewModel, INotifyDataErrorInfo, ISearchableViewModel, IProductViewModel
     {
         private ErrorsViewModel _errorsViewModel;
         #region Commands
         public ICommand NavigateHomeCommand { get; }
         public ICommand AddAssociatedPartCommand { get; internal set; }
         public ICommand DeleteAssociatedPartCommand { get; internal set; }
-        public ICommand SaveModifiedProductCommand { get; internal set; }
+        public ICommand SaveProductCommand { get; internal set; }
         public ICommand SearchPartCommand { get; internal set; }
-        public ICommand CancelModifiedProductCommand { get; internal set; }
         #endregion
 
         #region DataGridSources
@@ -184,6 +184,7 @@ namespace InventoryManager.ViewModels
                 }
             }
         }
+        
         private bool _associatedPartSelected = false;
         public bool AssociatedPartSelected
         {
@@ -195,7 +196,8 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        public string SearchBoxContents { get; set; } = "";
+        public string PartSearchBoxContents { get; set; } = "";
+        
         private Product _productBeingModified;
         public Product ProductBeingModified
         {
@@ -221,8 +223,8 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private ObservableCollection<Part> _tempAssociatedParts = new ObservableCollection<Part>();
-        public ObservableCollection<Part> TempAssociatedParts
+        private BindingList<Part> _tempAssociatedParts = new BindingList<Part>();
+        public BindingList<Part> TempAssociatedParts
         {
             get => _tempAssociatedParts;
             set
@@ -232,16 +234,11 @@ namespace InventoryManager.ViewModels
             }
         }
 
-        private ObservableCollection<Part> _tempDeletedParts = new ObservableCollection<Part>();
-        public ObservableCollection<Part> TempDeletedParts
-        {
-            get => _tempDeletedParts;
-            set
-            {
-                _tempDeletedParts = value;
-                OnPropertyChanged(nameof(TempDeletedParts));
-            }
-        }
+        public Product SelectedProduct { get; set; }
+
+        public BindingList<Product> Products { get; }
+
+        public string ProductSearchBoxContents { get; }
 
         public ModifyProductViewModel(NavigationStore navigationStore, Product productBeingModified)
         {
@@ -256,9 +253,8 @@ namespace InventoryManager.ViewModels
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new Services.NavigationService<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore)));
             AddAssociatedPartCommand = new AddAssociatedPartCommand(this);
             DeleteAssociatedPartCommand = new DeleteAssociatedPartCommand(this);
-            SaveModifiedProductCommand = new SaveModifiedProductCommand(this);
+            SaveProductCommand = new SaveProductCommand(this);
             SearchPartCommand = new SearchPartCommand(this);
-            CancelModifiedProductCommand = new CancelModifiedProductCommand(this);
         }
 
         private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)

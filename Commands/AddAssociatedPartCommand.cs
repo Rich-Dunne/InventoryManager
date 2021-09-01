@@ -1,4 +1,5 @@
-﻿using InventoryManager.ViewModels;
+﻿using InventoryManager.Interfaces;
+using InventoryManager.ViewModels;
 using System.Diagnostics;
 using System.Linq;
 
@@ -6,61 +7,35 @@ namespace InventoryManager.Commands
 {
     public class AddAssociatedPartCommand : CommandBase
     {
-        private AddProductViewModel _addProductViewModel;
-        private ModifyProductViewModel _modifyProductViewModel;
+        private IProductViewModel _viewModel;
 
-        public AddAssociatedPartCommand(AddProductViewModel viewModel)
+        public AddAssociatedPartCommand(IProductViewModel viewModel)
         {
-            _addProductViewModel = viewModel;
-        }
-
-        public AddAssociatedPartCommand(ModifyProductViewModel viewModel)
-        {
-            _modifyProductViewModel = viewModel;
+            _viewModel = viewModel;
         }
 
         public override void Execute(object param)
         {
-            Part selectedPart;
-            if(_addProductViewModel != null)
+            Part selectedPart = _viewModel.SelectedPart;
+            if (selectedPart == null)
             {
-                selectedPart = _addProductViewModel.SelectedPart;
-                if (selectedPart == null)
-                {
-                    return;
-                }
-
-                if (_addProductViewModel.AssociatedParts.Any(x => x.PartID == selectedPart.PartID))
-                {
-                    return;
-                }
-
-                _addProductViewModel.AssociatedParts.Add(selectedPart);
-                _addProductViewModel.OnPropertyChanged(nameof(_addProductViewModel.AssociatedParts));
-                _addProductViewModel.PartSelected = false;
-                Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
+                return;
             }
 
-            if (_modifyProductViewModel != null)
+            if (_viewModel.AssociatedParts.Any(x => x.PartID == selectedPart.PartID))
             {
-                selectedPart = _modifyProductViewModel.SelectedPart;
-                if(selectedPart == null)
-                {
-                    return;
-                }
-
-                if(_modifyProductViewModel.AssociatedParts.Any(x => x.PartID == selectedPart.PartID))
-                {
-                    return;
-                }
-
-                _modifyProductViewModel.AssociatedParts.Add(selectedPart);
-                _modifyProductViewModel.OnPropertyChanged(nameof(_modifyProductViewModel.AssociatedParts));
-                _modifyProductViewModel.PartSelected = false;
-                _modifyProductViewModel.TempAssociatedParts.Add(selectedPart);
-
-                Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
+                return;
             }
+
+            _viewModel.AssociatedParts.Add(selectedPart);
+            _viewModel.OnPropertyChanged(nameof(_viewModel.AssociatedParts));
+            _viewModel.PartSelected = false;
+            if (_viewModel is ModifyProductViewModel)
+            {
+                _viewModel.TempAssociatedParts.Add(selectedPart);
+            }
+
+            Debug.WriteLine($"Added part \"{selectedPart.Name}\" to product.");
         }
     }
 }

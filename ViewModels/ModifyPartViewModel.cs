@@ -5,19 +5,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
+using InventoryManager.Interfaces;
 using InventoryManager.Models;
 using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
 {
-    public class ModifyPartViewModel : BaseViewModel, INotifyDataErrorInfo
+    public class ModifyPartViewModel : BaseViewModel, INotifyDataErrorInfo, IPartViewModel
     {
         private ErrorsViewModel _errorsViewModel;
 
         #region Commands
         public ICommand NavigateHomeCommand { get; }
-        public ICommand SaveNewPartCommand { get; }
-        public ICommand SaveModifiedPartCommand { get; }
+        public ICommand SavePartCommand { get; }
         #endregion
 
         #region Properties
@@ -212,7 +212,7 @@ namespace InventoryManager.ViewModels
             PartBeingModified = Inventory.LookupPart(partBeingModified.PartID);
             AssignFormProperties();
             EnableSave = !HasErrors;
-            SaveModifiedPartCommand = new SaveModifiedPartCommand(this);
+            SavePartCommand = new SavePartCommand(this);
         }
 
         public IEnumerable GetErrors(string propertyName) => _errorsViewModel.GetErrors(propertyName);

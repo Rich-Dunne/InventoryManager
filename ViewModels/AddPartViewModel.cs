@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using InventoryManager.Commands;
+using InventoryManager.Interfaces;
 using InventoryManager.Services;
 using InventoryManager.Stores;
 
 namespace InventoryManager.ViewModels
 {
-    public class AddPartViewModel : BaseViewModel, INotifyDataErrorInfo
+    public class AddPartViewModel : BaseViewModel, INotifyDataErrorInfo, IPartViewModel
     {
         private ErrorsViewModel _errorsViewModel;
 
         #region Commands
         public ICommand NavigateHomeCommand { get; }
-        public ICommand SaveNewPartCommand { get; }
+        public ICommand SavePartCommand { get; }
         #endregion
 
         #region Properties
@@ -25,7 +25,7 @@ namespace InventoryManager.ViewModels
         #endregion
 
         #region FormProperties
-        public int PartID { get; } = -1;
+        public int PartID { get; set; } = -1;
         private string _partName;
         public string PartName
         {
@@ -197,7 +197,7 @@ namespace InventoryManager.ViewModels
         public AddPartViewModel(NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(new NavigationService<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore)));
-            SaveNewPartCommand = new SaveNewPartCommand(this);
+            SavePartCommand = new SavePartCommand(this);
             _errorsViewModel = new ErrorsViewModel();
             _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
             ValidateInput();

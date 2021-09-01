@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using InventoryManager.Commands;
+using InventoryManager.Interfaces;
 using InventoryManager.Models;
 using InventoryManager.Services;
 using InventoryManager.Stores;
@@ -12,7 +13,7 @@ using System.Windows.Input;
 
 namespace InventoryManager.ViewModels
 {
-    public class HomeViewModel : BaseViewModel
+    public class HomeViewModel : BaseViewModel, ISearchableViewModel
     {
         #region Commands
         public ICommand NavigateAddProductCommand { get; }
