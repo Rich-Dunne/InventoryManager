@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace InventoryManager.Views
@@ -26,17 +27,6 @@ namespace InventoryManager.Views
             return match.Success;
         }
 
-        private void PreviewPriceInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !IsPriceInputValid(e.Text);
-        }
-
-        private bool IsPriceInputValid(string text)
-        {
-            var match = Regex.Match(text, @"^[1-9]\d{0,2}(\.\d{3})*(,\d+)?$");
-            return match.Success;
-        }
-
         private void TextBox_IntPasting(object sender, DataObjectPastingEventArgs e)
         {
             e.CancelCommand();
@@ -45,6 +35,16 @@ namespace InventoryManager.Views
         private void TextBox_PricePasting(object sender, DataObjectPastingEventArgs e)
         {
             e.CancelCommand();
+        }
+
+        private void dg_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Selector selector = sender as Selector;
+            DataGrid dataGrid = selector as DataGrid;
+            if (dataGrid != null && selector.SelectedItem != null && dataGrid.SelectedIndex >= 0)
+            {
+                dataGrid.ScrollIntoView(selector.SelectedItem);
+            }
         }
     }
 }
