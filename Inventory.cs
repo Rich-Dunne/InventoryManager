@@ -20,27 +20,19 @@ namespace InventoryManager
         /// </summary>
         internal static void InitializeData()
         {
-            AddProduct(new Product("Product 1", 9.99, 5, 1, 10, new BindingList<Part>() { new InHousePart("Part 1", 2.99, 3, 2, 6, 12345)  }));
-            AddProduct(new Product("Product 2", 19.99, 15, 1, 10, new BindingList<Part>()));
-            AddProduct(new Product("Product 3", 7.99, 7, 1, 10, new BindingList<Part>()));
-            AddProduct(new Product("Product 4", 23.99, 23, 1, 10, new BindingList<Part>()));
+            AddPart(new InHousePart("Wheel", 2.99, 3, 2, 6, 12345));
+            AddPart(new InHousePart("Seat", 6.99, 7, 2, 6, 94685));
+            AddPart(new OutsourcedPart("Chain", 4.75, 5, 2, 6, "Company X"));
+            AddPart(new OutsourcedPart("Handlebars", 14.99, 12, 2, 6, "Company Y"));
 
-            AddPart(new InHousePart("Part 1", 2.99, 3, 2, 6, 12345));
-            AddPart(new InHousePart("Part 2", 6.99, 7, 2, 6, 94685));
-            AddPart(new OutsourcedPart("Part 3", 4.75, 5, 2, 6, "Company X"));
-            AddPart(new OutsourcedPart("Part 4", 14.99, 12, 2, 6, "Company Y"));
-            AddPart(new InHousePart("Part 5", 27.99, 32, 2, 6, 34675));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company Z"));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company ABC"));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
-            AddPart(new OutsourcedPart("Part 6", 0.99, 10, 2, 6, "Company DEF"));
-            AddPart(new InHousePart("Part 6", 0.99, 10, 2, 6, 90156));
+            AddProduct(new Product("Red Bicycle", 9.99, 5, 1, 10, new BindingList<Part>() { Parts.First() }));
+            AddProduct(new Product("Blue Bicycle", 19.99, 15, 1, 10, new BindingList<Part>()));
+            AddProduct(new Product("Green Bicycle", 7.99, 7, 1, 10, new BindingList<Part>()));
+            AddProduct(new Product("Yellow Bicycle", 23.99, 23, 1, 10, new BindingList<Part>()));
         }
 
         /// <summary>
-        /// Add a <paramref name="product"/> to the inventory's list of products
+        /// Adds a <paramref name="product"/> to the inventory's list of products
         /// </summary>
         /// <param name="product"></param>
         internal static void AddProduct(Product product)
@@ -62,9 +54,10 @@ namespace InventoryManager
         }
 
         /// <summary>
-        /// Remove a <paramref name="product"/> from the inventory's list of products
+        /// Removes a <paramref name="product"/> from the inventory's list of products
         /// </summary>
         /// <param name="product"></param>
+        /// /// <returns>False if the product could not be removed</returns>
         internal static bool RemoveProduct(int productID)
         {
             var productToRemove = Products.FirstOrDefault(x => x.ProductID == productID);
@@ -79,7 +72,7 @@ namespace InventoryManager
         }
 
         /// <summary>
-        /// Look up a product by it's <paramref name="productID"/>
+        /// Looks up a product by it's <paramref name="productID"/>
         /// </summary>
         /// <param name="productID"></param>
         /// <returns>A <seealso cref="Product">Product</seealso> or null</returns>
@@ -113,30 +106,36 @@ namespace InventoryManager
         }
 
         /// <summary>
-        /// Add a <paramref name="part"/> to the inventory's list of parts
+        /// Adds a <paramref name="part"/> to the inventory's list of parts
         /// </summary>
         /// <param name="part"></param>
         internal static void AddPart(Part part)
         {
             if(Parts.Count == 0 || (Parts.Count > 0 && Parts.Last().PartID == part.PartID - 1))
             {
+                Debug.WriteLine($"Added in condition 1");
                 Parts.Add(part);
                 return;
             }
             if (part.PartID == 0 && Parts.First().PartID != 0)
             {
+                Debug.WriteLine($"Added in condition 2");
                 Parts.Insert(0, part);
                 return;
             }
 
             var previousPart = Parts.FirstOrDefault(x => x.PartID == part.PartID - 1);
-            Parts.Insert(Parts.IndexOf(previousPart), part);
+            if (previousPart != null)
+            {
+                Parts.Insert(Parts.IndexOf(previousPart)+1, part);
+            }
         }
 
         /// <summary>
         /// Removes a <paramref name="part"/> from the inventory's list of parts
         /// </summary>
         /// <param name="part"></param>
+        /// /// <returns>False if the part could not be removed</returns>
         internal static bool DeletePart(Part part)
         {
             var partToRemove = LookupPart(part.PartID);
@@ -147,11 +146,12 @@ namespace InventoryManager
 
             DeletedPartIDs.Enqueue(part.PartID);
             Parts.Remove(partToRemove);
+            Debug.WriteLine($"Successfully deleted part");
             return true;
         }
 
         /// <summary>
-        /// Look up a product by it's <paramref name="partID"/>
+        /// Looks up a product by it's <paramref name="partID"/>
         /// </summary>
         /// <param name="partID"></param>
         /// <returns>A <seealso cref="Part">Part</seealso> or null</returns>
@@ -169,14 +169,10 @@ namespace InventoryManager
                 Debug.WriteLine($"partToUpdate is null.");
                 return;
             }
-            Debug.WriteLine($"Part type is {part.GetType().Name}");
-
+            
             if(part.GetType() != partToUpdate.GetType())
             {
-                DeletePart(partToUpdate);
-                DeletedPartIDs.Dequeue();
-                AddPart(part);
-                Debug.WriteLine($"\"{partToUpdate.Name}\" updated as new part.");
+                UpdateAsNewPartType();
                 return;
             }
 
@@ -187,6 +183,14 @@ namespace InventoryManager
             partToUpdate.Min = part.Min;
             partToUpdate.Max = part.Max;
             Debug.WriteLine($"\"{partToUpdate.Name}\" updated.");
+
+            void UpdateAsNewPartType()
+            {
+                DeletePart(partToUpdate);
+                DeletedPartIDs.Dequeue();
+                AddPart(part);
+                Debug.WriteLine($"\"{partToUpdate.Name}\" updated as new part \"{part.Name}\".");
+            }
         }
     }
 }
