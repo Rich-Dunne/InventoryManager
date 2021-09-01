@@ -114,6 +114,7 @@
                     HeadersVisibility="Column"
                     ItemsSource="{Binding Products}"
                     SelectionMode="Single"
+                    SelectionChanged="dg_OnSelectionChanged"
                     SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                 <DataGrid.Resources>
@@ -168,6 +169,7 @@
                 HeadersVisibility="Column"
                 ItemsSource="{Binding Parts}"
                 SelectionMode="Single"
+                SelectionChanged="dg_OnSelectionChanged"
                 SelectedItem="{Binding SelectedPart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                 <DataGrid.Resources>
