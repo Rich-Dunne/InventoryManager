@@ -8,29 +8,6 @@
              d:DesignHeight="450" d:DesignWidth="400">
 
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Validation.ErrorTemplate">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <DockPanel LastChildFill="True">
-                                <TextBlock DockPanel.Dock="Right" 
-                                    Foreground="Red"
-                                    Margin="5 0 0 0"
-                                    FontSize="10pt"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding ErrorContent}"/>
-                                <Border BorderBrush="Red" BorderThickness="1">
-                                    <AdornedElementPlaceholder />
-                                </Border>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </Grid.Resources>
-
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -94,107 +71,166 @@
         <!-- Row 5 -->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="4"
-                    Margin="20 0 0 0">
-            <Label  Content="Part ID" />
+                    HorizontalAlignment="Left"
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Part ID" Width="100"/>
             <TextBox Width="100" Height="20" 
-                 Margin="55 0 0 0" 
                  IsEnabled="false"
                  Text="{Binding PartID, Mode=OneWay}" />
         </StackPanel>
         
-        <!-- Row 6 -->
+        <!-- Row 6  MOVE TEXTBOX MARGIN TO STACKPANEL-->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="5"
-                    Margin="20 0 0 0">
-            <Label HorizontalAlignment="Left" Content="Name" />
-            <TextBox
-                 Width="100" Height="20" 
-                 Margin="59 0 0 0"
-                 Text="{Binding PartName, UpdateSourceTrigger=PropertyChanged}"/>
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Name" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <TextBox x:Name="PartNameTextBox"
+                     HorizontalAlignment="Left"
+                     Width="100" Height="20" 
+                     Text="{Binding PartName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <ContentPresenter Content="{Binding ElementName= PartNameTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 7 -->
         <StackPanel Orientation="Horizontal"
-                    Grid.Column="1" Grid.Row="6">
-            <Label Margin="20 0 0 0" Content="Inventory" />
-            <TextBox
-                 Width="100" Height="20"
-                 Margin="41 0 0 0"
-                 PreviewTextInput="PreviewIntInput"
-                 DataObject.Pasting="TextBox_IntPasting"
-                 Text="{Binding PartInventory, UpdateSourceTrigger=PropertyChanged}"/>
+                    Grid.Column="1" Grid.Row="6"
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Inventory" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <TextBox x:Name="InventoryTextBox"
+                     HorizontalAlignment="Left"
+                     Width="100" Height="20"
+                     PreviewTextInput="PreviewIntInput"
+                     DataObject.Pasting="TextBox_IntPasting"
+                     Text="{Binding PartInventory, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <ContentPresenter Content="{Binding ElementName= InventoryTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 8 -->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="7"
-                    Margin="20 0 0 0">
-            <Label Content="Price" />
-            <TextBox x:Name="priceTextBox"
-                 Width="100" Height="20"
-                 Margin="65 0 0 0"
-                 DataObject.Pasting="TextBox_PricePasting"
-                 Text="{Binding PartPrice, UpdateSourceTrigger=LostFocus}"/>
+                    HorizontalAlignment="Left"
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Price" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <TextBox x:Name="PriceTextBox"
+                     HorizontalAlignment="Left"
+                     Width="100" Height="20"
+                     DataObject.Pasting="TextBox_PricePasting"
+                     Text="{Binding PartPrice, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True}"/>
+                <ContentPresenter Content="{Binding ElementName= PriceTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 9 -->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="8"
-                    Margin="20 0 0 0">
-            <Label Content="Min" />
-            <TextBox
-                 Width="100" Height="20"
-                 Margin="71 0 0 0"
-                 PreviewTextInput="PreviewIntInput"
-                 DataObject.Pasting="TextBox_IntPasting"
-                 Text="{Binding PartMin, UpdateSourceTrigger=PropertyChanged}"/>
+                    HorizontalAlignment="Left"
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Min" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <TextBox x:Name="MinTextBox"
+                     HorizontalAlignment="Left"
+                     Width="100" Height="20"
+                     PreviewTextInput="PreviewIntInput"
+                     DataObject.Pasting="TextBox_IntPasting"
+                     Text="{Binding PartMin, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <ContentPresenter Content="{Binding ElementName= MinTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 10 -->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="9"
-                    Margin="20 0 0 0">
-            <Label Content="Max" />
-            <TextBox
-                 Width="100" Height="20"
-                 Margin="69 0 0 0"
-                 PreviewTextInput="PreviewIntInput"
-                 DataObject.Pasting="TextBox_IntPasting"
-                 Text="{Binding PartMax, UpdateSourceTrigger=PropertyChanged}"/>
+                    HorizontalAlignment="Left"
+                    MaxWidth="300" Margin="0 0 0 5">
+            <Label Content="Max" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+                <TextBox x:Name="MaxTextBox"
+                     HorizontalAlignment="Left"
+                     Width="100" Height="20"
+                     PreviewTextInput="PreviewIntInput"
+                     DataObject.Pasting="TextBox_IntPasting"
+                     Text="{Binding PartMax, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <ContentPresenter Content="{Binding ElementName= MaxTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 11 -->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="1" Grid.Row="10"
-                    Margin="20 0 0 0">
+                    HorizontalAlignment="Left"
+                    MaxWidth="300" Margin="0 0 0 5">
             <Grid>
                 <Label Content="Company Name"
+                       Width="100"
                        Visibility="{Binding ElementName=rbOutsourced, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
 
                 <Label Content="Machine ID"
+                       Width="100"
                        Visibility="{Binding ElementName=rbInHouse, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
             </Grid>
-            
-            <Grid>
-                <TextBox
-                    Width="100" Height="20"
-                    Margin="31,3,0,3"
-                    PreviewTextInput="PreviewIntInput"
-                    DataObject.Pasting="TextBox_IntPasting"
-                    Text="{Binding MachineID, UpdateSourceTrigger=PropertyChanged}"
-                    Visibility="{Binding ElementName=rbInHouse, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
 
-                <TextBox
-                    Width="100" Height="20"
-                    Margin="5,3,0,3"
-                    Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"
-                    Visibility="{Binding ElementName=rbOutsourced, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
-            </Grid>
-            
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <DataTemplate DataType="{x:Type ValidationError}">
+                        <TextBlock Text="{Binding ErrorContent}" Foreground="White" Background="Red" Padding="2" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </StackPanel.Resources>
+
+                <Grid>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBox x:Name="MachineIDTextBox"
+                            HorizontalAlignment="Left"
+                            Width="100" Height="20" 
+                            PreviewTextInput="PreviewIntInput"
+                            DataObject.Pasting="TextBox_IntPasting"
+                            Text="{Binding MachineID, UpdateSourceTrigger=PropertyChanged}"
+                            Visibility="{Binding ElementName=rbInHouse, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
+                            <ContentPresenter Content="{Binding ElementName= MachineIDTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBox x:Name="CompanyNameTextBox"
+                            HorizontalAlignment="Left"
+                            Width="100" Height="20"
+                            Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"
+                            Visibility="{Binding ElementName=rbOutsourced, Path=IsChecked, Converter={StaticResource BooleanConverter}}"/>
+                            <ContentPresenter Content="{Binding ElementName= CompanyNameTextBox, Path=(Validation.Errors).CurrentItem}" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
         </StackPanel>
 
         <!-- Row 12 -->
-
         <StackPanel Orientation="Horizontal" 
                     Grid.Column="1"
                     Grid.Row="11"
@@ -211,7 +247,7 @@
                 Margin="5 0 0 0"
                 Content="Save"
                 IsEnabled="{Binding EnableSave}"
-                Command="{Binding SaveNewPartCommand}"/>
+                Command="{Binding SavePartCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
