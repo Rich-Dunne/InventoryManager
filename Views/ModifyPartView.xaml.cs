@@ -26,17 +26,6 @@ namespace InventoryManager.Views
             return match.Success;
         }
 
-        private void PreviewPriceInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !IsPriceInputValid(e.Text);
-        }
-
-        private bool IsPriceInputValid(string text)
-        {
-            var match = Regex.Match(text, @"^[1-9]\d{0,2}(\.\d{3})*(,\d+)?$");
-            return match.Success;
-        }
-
         private void TextBox_IntPasting(object sender, DataObjectPastingEventArgs e)
         {
             e.CancelCommand();
